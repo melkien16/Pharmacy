@@ -3,8 +3,8 @@ import NavLists from "./NavLists";
 
 const Header = () => {
   return (
-    <div className="flex justify-between items-center align-middle p-2 px-20 bg-secondary">
-      <h1 className="font-bold text-4xl border-2 p-3 py-1 rounded-full">P</h1>
+    <header className="flex justify-between items-center align-middle p-2 px-20 bg-secondary fixed w-full z-10 shadow-sm mb-96 h-16">
+      <h1 className="font-bold text-4xl border-2 p-3 py-1 rounded-full bg-primary">P</h1>
       <ul className="flex justify-around space-x-10">
         {NavLists.map((item, index) => (
           <li key={index}>
@@ -12,7 +12,7 @@ const Header = () => {
           </li>
         ))}
       </ul>
-    </div>
+    </header>
   );
 };
 
