@@ -40,7 +40,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+    <div className="min-h-[90vh] bg-gray-100 flex items-center justify-center">
       <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
         <h2 className="text-2xl font-bold text-blue-900 mb-4 text-center">
           Welcome Back!
