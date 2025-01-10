@@ -30,7 +30,6 @@ const PharmacyDashboard = () => {
 
       {/* Main Content */}
       <main className="flex-1 p-6">
-        {/* Header */}
         <header className="flex justify-between items-center pb-4 border-b border-gray-300">
           <h1 className="text-2xl font-bold">Welcome to Your Dashboard</h1>
           <button className="lg:hidden bg-blue-900 text-white px-4 py-2 rounded-md">
@@ -38,7 +37,6 @@ const PharmacyDashboard = () => {
           </button>
         </header>
 
-        {/* Quick Stats */}
         <section className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-white shadow rounded-lg p-4 text-center">
             <h3 className="text-lg font-semibold">Total Drugs Listed</h3>
@@ -54,7 +52,6 @@ const PharmacyDashboard = () => {
           </div>
         </section>
 
-        {/* Quick Links */}
         <section className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
           <button className="bg-blue-900 text-white shadow rounded-lg p-4 text-center hover:bg-blue-700">
             Add New Drug
@@ -67,7 +64,6 @@ const PharmacyDashboard = () => {
           </button>
         </section>
 
-        {/* Recent Activity */}
         <section className="mt-6">
           <h2 className="text-xl font-bold mb-4">Recent Activity</h2>
           <div className="bg-white shadow rounded-lg p-4">
