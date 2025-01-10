@@ -1,72 +1,163 @@
 import React, { useState, Fragment } from "react";
 
+const DummyData = [
+  {
+    id: 1,
+    drugName: "Paracetamol",
+    drugDescription:
+      "Paracetamol is commonly used to treat fever and mild to moderate pain.",
+    pharmacyName: "ABC Pharmacy",
+    pharmacyDescription:
+      "ABC Pharmacy is known for its wide range of affordable medications.",
+    price: 10,
+    availability: "In Stock",
+    distance: "2 km",
+    rating: 4.5,
+  },
+  {
+    id: 2,
+    drugName: "Ibuprofen",
+    drugDescription:
+      "Ibuprofen helps reduce inflammation, pain, and fever effectively.",
+    pharmacyName: "HealthPlus Pharmacy",
+    pharmacyDescription:
+      "HealthPlus Pharmacy provides premium healthcare products and services.",
+    price: 15,
+    availability: "Limited Stock",
+    distance: "1.5 km",
+    rating: 4.0,
+  },
+  {
+    id: 3,
+    drugName: "Amoxicillin",
+    drugDescription:
+      "Amoxicillin is an antibiotic used to treat various bacterial infections.",
+    pharmacyName: "CityCare Pharmacy",
+    pharmacyDescription:
+      "CityCare Pharmacy offers reliable pharmacy services with fast delivery.",
+    price: 20,
+    availability: "Out of Stock",
+    distance: "3.2 km",
+    rating: 3.8,
+  },
+  {
+    id: 4,
+    drugName: "Cough Syrup",
+    drugDescription:
+      "Cough syrup provides relief from cough and throat irritation.",
+    pharmacyName: "Wellness Pharmacy",
+    pharmacyDescription:
+      "Wellness Pharmacy specializes in holistic health products and services.",
+    price: 12,
+    availability: "In Stock",
+    distance: "0.8 km",
+    rating: 4.7,
+  },
+  {
+    id: 5,
+    drugName: "Vitamin C",
+    drugDescription:
+      "Vitamin C supplements boost immunity and improve overall health.",
+    pharmacyName: "Healthy Life Pharmacy",
+    pharmacyDescription:
+      "Healthy Life Pharmacy offers a variety of vitamins and supplements.",
+    price: 8,
+    availability: "In Stock",
+    distance: "2.5 km",
+    rating: 4.2,
+  },
+];
+
 const CustomerSearchPage = () => {
   const [searchResults, setSearchResults] = useState([]);
 
   return (
-    <div className="bg-gray-100 flex flex-col min-h-screen">
-      <div className="pt-20 pb-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <h2 className="text-3xl font-semibold text-gray-800 mb-4 text-center">
+    <div className="bg-gray-50 flex flex-col min-h-[80vh] mt-16 py-2">
+      <div className="pt-12 pb-8 px-4 sm:px-6 lg:px-8 w-[50%] max-w-[80%] mx-auto">
+        <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
           Search for Medications
         </h2>
-        <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+        <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
           <input
             type="text"
             placeholder="Search for medications..."
-            className="flex-grow border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-grow border border-gray-300 p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          <select className="border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option>Choose Category</option>
-            <option>Analgesics</option>
-            <option>Antibiotics</option>
+          <select className="border border-gray-300 p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option>Price</option>
+            <option selected>Distance</option>
+            <option>Rating</option>
           </select>
-          <input
-            type="text"
-            placeholder="Set price range"
-            className="border border-gray-300 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <button className="bg-green-500 text-white px-6 py-3 rounded-md hover:bg-green-600">
+          <button className="bg-green-600 text-white px-8 py-3 rounded-lg shadow-md hover:bg-green-700 transition-all">
             Search
           </button>
         </div>
       </div>
 
-      <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex-grow">
-        {searchResults.length > 0 ? (
+      <div className="px-4 sm:px-6 lg:px-8 w-[80%] mx-auto flex-grow">
+        {DummyData.length > 0 ? (
           <Fragment>
-            <h3 className="text-2xl font-semibold text-gray-800 mb-4">
+            <h3 className="text-2xl font-semibold text-gray-800 mb-6">
               Search Results
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {searchResults.map((result, index) => (
+            <div className="flex flex-col space-y-6">
+              {DummyData.map((result) => (
                 <div
-                  key={index}
-                  className="bg-white shadow-md rounded-md p-4 hover:shadow-lg transition-shadow"
+                  key={result.id}
+                  className="bg-white rounded-lg shadow-md p-6 flex flex-col space-y-4 hover:shadow-lg transition-shadow w-full"
                 >
-                  <h4 className="text-lg font-bold">{result.name}</h4>
-                  <p className="text-sm text-gray-600">
-                    Price: ${result.price}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    Available at: {result.pharmacyName}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    Distance: {result.distance}km
-                  </p>
-                  <button className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
-                    View Pharmacy
-                  </button>
+                  {/* Drug and Pharmacy Info */}
+                  <div className="flex justify-between items-center">
+                    {/* Left Content */}
+                    <div className="flex flex-col space-y-2">
+                      <h4 className="text-lg font-bold text-gray-800">
+                        {result.drugName}
+                      </h4>
+                      <p className="text-sm text-gray-600">
+                        {result.drugDescription}
+                      </p>
+                      <button className="text-blue-500 font-medium hover:underline">
+                        Load more about drug
+                      </button>
+                      <p className="text-sm text-gray-600">
+                        Price:{" "}
+                        <span className="font-medium">${result.price}</span>
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        Available at:{" "}
+                        <span className="font-medium">
+                          {result.pharmacyName}
+                        </span>
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        {result.pharmacyDescription}
+                      </p>
+                      <button className="text-blue-500 font-medium hover:underline">
+                        See details about pharmacy
+                      </button>
+                      <p className="text-sm text-gray-600">
+                        Rating:{" "}
+                        <span className="font-medium text-yellow-500 ml-1">
+                          {result.rating} ★
+                        </span>
+                      </p>
+                    </div>
+
+                    {/* Right Content */}
+                    <div className="flex flex-col items-end space-y-2">
+                      <p className="text-sm text-gray-600">
+                        Distance:{" "}
+                        <span className="font-medium text-gray-800">
+                          {result.distance}
+                        </span>
+                      </p>
+                      <button className="bg-green-600 text-white w-14 h-14 rounded-full hover:bg-green-700">
+                        GO
+                      </button>
+                    </div>
+                  </div>
                 </div>
               ))}
-            </div>
-
-            <div className="mt-10">
-              <h3 className="text-2xl font-semibold text-gray-800 mb-4">
-                Pharmacy Locations
-              </h3>
-              <div className="bg-gray-200 w-full h-64 rounded-md">
-                Map Placeholder
-              </div>
             </div>
           </Fragment>
         ) : (
