@@ -22,8 +22,8 @@ const PharmacyDetails = () => {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen p-6 sm:p-10">
-      <div className="bg-white shadow-md rounded-md p-6 mb-6">
+    <div className="bg-gray-100 min-h-screen p-6 sm:p-10 pt-20">
+      <div className="bg-white shadow-md rounded-md p-6 mb-6 mt-10">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold text-gray-800">{pharmacy.name}</h1>
           <div
