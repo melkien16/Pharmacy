@@ -3,7 +3,6 @@ import React from "react";
 const AdminDashboard = () => {
   return (
     <div className="flex min-h-screen">
-      {/* Sidebar */}
       <aside className="bg-blue-900 text-white w-64 py-8 px-4 hidden md:block">
         <h2 className="text-2xl font-bold mb-8">Admin Dashboard</h2>
         <ul className="space-y-6">
@@ -30,7 +29,6 @@ const AdminDashboard = () => {
         </ul>
       </aside>
 
-      {/* Main Dashboard */}
       <main className="flex-1 bg-gray-100 p-8">
         <header className="bg-white p-6 shadow-md rounded-md mb-8">
           <h1 className="text-3xl font-bold text-blue-900">Admin Dashboard</h1>
@@ -39,7 +37,6 @@ const AdminDashboard = () => {
           </p>
         </header>
 
-        {/* Stats Overview */}
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           <div className="bg-white shadow-md rounded-md p-6">
             <h3 className="text-lg font-bold text-blue-900">
@@ -59,7 +56,6 @@ const AdminDashboard = () => {
           </div>
         </section>
 
-        {/* Quick Links */}
         <section className="bg-white shadow-md rounded-md p-6 mb-8">
           <h3 className="text-xl font-bold text-blue-900 mb-4">Quick Links</h3>
           <div className="flex space-x-4">
@@ -72,7 +68,6 @@ const AdminDashboard = () => {
           </div>
         </section>
 
-        {/* Recent Activity */}
         <section className="bg-white shadow-md rounded-md p-6">
           <h3 className="text-xl font-bold text-blue-900 mb-4">
             Recent Activity
