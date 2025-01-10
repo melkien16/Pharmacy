@@ -3,28 +3,7 @@ import React from "react";
 const DrugDetailsPage = () => {
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Header */}
-      <header className="flex justify-between items-center bg-blue-900 text-white py-4 px-6 shadow-md">
-        <h1 className="text-xl font-bold">P2P Pharmacy</h1>
-        <nav className="space-x-6">
-          <a href="/home" className="hover:text-blue-300">
-            Home
-          </a>
-          <a href="/search" className="hover:text-blue-300">
-            Search
-          </a>
-          <a href="/register" className="hover:text-blue-300">
-            Register Pharmacy
-          </a>
-          <a href="/login" className="hover:text-blue-300">
-            Login
-          </a>
-        </nav>
-      </header>
-
-      {/* Main Content */}
       <main className="flex flex-col lg:flex-row justify-between px-6 py-8 gap-8">
-        {/* Drug Information */}
         <div className="lg:w-1/2 flex flex-col items-start bg-white shadow-md p-6 rounded-md">
           <h2 className="text-3xl font-bold text-gray-800">
             Paracetamol 500mg
@@ -49,13 +28,11 @@ const DrugDetailsPage = () => {
           </button>
         </div>
 
-        {/* Nearby Pharmacies */}
         <div className="lg:w-1/2">
           <h3 className="text-xl font-bold text-gray-800 mb-4">
             Nearby Pharmacies
           </h3>
 
-          {/* List of Pharmacies */}
           <div className="space-y-4">
             <div className="bg-white shadow-md p-4 rounded-md flex justify-between items-center">
               <div>
@@ -84,7 +61,6 @@ const DrugDetailsPage = () => {
             </div>
           </div>
 
-          {/* Map Integration Placeholder */}
           <div className="mt-6">
             <h3 className="text-lg font-bold text-gray-800 mb-2">
               Pharmacy Locations
@@ -95,29 +71,6 @@ const DrugDetailsPage = () => {
           </div>
         </div>
       </main>
-
-      {/* Footer */}
-      <footer className="bg-blue-900 text-white py-6 mt-auto">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between">
-          <div className="flex space-x-6 mb-4 sm:mb-0">
-            <a href="#about" className="text-sm hover:text-blue-300">
-              About
-            </a>
-            <a href="#contact" className="text-sm hover:text-blue-300">
-              Contact
-            </a>
-            <a href="#privacy" className="text-sm hover:text-blue-300">
-              Privacy Policy
-            </a>
-            <a href="#terms" className="text-sm hover:text-blue-300">
-              Terms of Service
-            </a>
-          </div>
-          <p className="text-sm">
-            © P2P Pharmacy Management System. All Rights Reserved.
-          </p>
-        </div>
-      </footer>
     </div>
   );
 };
