@@ -6,7 +6,6 @@ import Header from "./components/Header";
 import Hero from "./components/Hero";
 import Search from "./pages/Search";
 import PageNotFound from "./pages/PageNotFound";
-import HomePage from "./pages/Test";
 import CustomerSearchPage from "./pages/CustSearchPage";
 import DrugDetailsPage from "./pages/DrugDetail";
 import PharmacyDashboard from "./pages/PharmacyDashbourd";
@@ -33,17 +32,16 @@ function App() {
       {/* <CustomerSearchPage /> */}
       {/* <DrugDetailsPage /> */}
       {/* <PharmacyDashboard /> */}
-      {/* <Header /> */}
-      {/* <Routes>
+      <Header />
+      <Routes>
         <Route path="/home" element={<Hero />} />
         <Route path="/search" element={<Search />} />
         <Route path="/register" element={<RegistrationPage/>} />
         <Route path="/login" element={<LoginPage/>} />
-      </Routes> */}
+      </Routes>
       {/* <DrugDetailsPage /> */}
-      {/* <Footer /> */}
-      <PharmacyDetails />
-
+      {/* <PharmacyDetails /> */}
+      <Footer />
     </BrowserRouter>
   );
 }

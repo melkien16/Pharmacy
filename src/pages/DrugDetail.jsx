@@ -2,7 +2,7 @@ import React from "react";
 
 const DrugDetailsPage = () => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-[80vh] flex flex-col mt-16">
       <main className="flex flex-col lg:flex-row justify-between px-6 py-8 gap-8">
         <div className="lg:w-1/2 flex flex-col items-start bg-white shadow-md p-6 rounded-md">
           <h2 className="text-3xl font-bold text-gray-800">
