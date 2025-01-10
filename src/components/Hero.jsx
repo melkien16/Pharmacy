@@ -5,7 +5,7 @@ import Features from "./Features";
 const Hero = () => {
   return (
     <main>
-      <section className="pt-20 bg-gradient-to-r from-blue-100 to-blue-200 py-16 text-center">
+      <section className="md:pt-28 pt-20 bg-gradient-to-r from-blue-100 to-blue-200 py-16 text-center">
         <h1 className="text-4xl font-bold text-blue-900">
           Find the Best Prices and Nearby Pharmacies for Your Medications
         </h1>
