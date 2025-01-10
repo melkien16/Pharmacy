@@ -1,13 +1,51 @@
-import React from "react";
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../contexts/UserContext";
 
 const LoginPage = () => {
+  const { login } = useContext(UserContext);
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const adminCredentials = {
+    email: "admin@example.com",
+    password: "admin123",
+    role: "admin",
+  };
+  const pharmacistCredentials = {
+    email: "pharmacist@example.com",
+    password: "pharmacist123",
+    role: "pharmacist",
+  };
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    if (
+      email === adminCredentials.email &&
+      password === adminCredentials.password
+    ) {
+      login(adminCredentials);
+      navigate("/admin");
+    } else if (
+      email === pharmacistCredentials.email &&
+      password === pharmacistCredentials.password
+    ) {
+      login(pharmacistCredentials); // Set user context
+      navigate("/pharmacy");
+    } else {
+      alert("Invalid email or password. Please try again.");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
         <h2 className="text-2xl font-bold text-blue-900 mb-4 text-center">
           Welcome Back!
         </h2>
-        <form>
+        <form onSubmit={handleLogin}>
           <div className="mb-4">
             <label
               htmlFor="email"
@@ -20,6 +58,8 @@ const LoginPage = () => {
               id="email"
               placeholder="Enter your email"
               className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-blue-500"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="mb-6">
@@ -34,6 +74,8 @@ const LoginPage = () => {
               id="password"
               placeholder="Enter your password"
               className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-blue-500"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
           <button

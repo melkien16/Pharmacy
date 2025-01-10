@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useRef } from "react";
 
 const DummyData = [
   {
@@ -68,8 +68,38 @@ const DummyData = [
   },
 ];
 
+const sortData = (data, key, ascending = true) => {
+  return data.sort((a, b) => {
+    let valueA = key === "distance" ? parseFloat(a[key]) : a[key];
+    let valueB = key === "distance" ? parseFloat(b[key]) : b[key];
+
+    if (ascending) {
+      return valueA > valueB ? 1 : -1;
+    } else {
+      return valueA < valueB ? 1 : -1;
+    }
+  });
+};
+
 const CustomerSearchPage = () => {
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState(DummyData);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortKey, setSortKey] = useState("distance");
+  const [ascending, setAscending] = useState(true);
+
+  const handleSearch = () => {
+    const filteredResults = DummyData.filter((item) =>
+      item.drugName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    const sortedResults = sortData(filteredResults, sortKey, ascending);
+    setSearchResults([...sortedResults]);
+  };
+
+  const toggleSortOrder = () => {
+    setAscending(!ascending);
+    const sortedResults = sortData(searchResults, sortKey, !ascending);
+    setSearchResults([...sortedResults]);
+  };
 
   return (
     <div className="bg-gray-50 flex flex-col min-h-[80vh] mt-16 py-2">
@@ -80,35 +110,48 @@ const CustomerSearchPage = () => {
         <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
           <input
             type="text"
-            placeholder="Search for medications..."
-            className="flex-grow border border-gray-300 p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Search by drug name"
+            className="border border-gray-300 p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
-          <select className="border border-gray-300 p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option>Price</option>
-            <option selected>Distance</option>
-            <option>Rating</option>
+          <select
+            className="border border-gray-300 p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onChange={(e) => setSortKey(e.target.value)}
+            value={sortKey}
+          >
+            <option value="distance">Distance</option>
+            <option value="price">Price</option>
+            <option value="rating">Rating</option>
           </select>
-          <button className="bg-green-600 text-white px-8 py-3 rounded-lg shadow-md hover:bg-green-700 transition-all">
+          <button
+            className="border border-gray-300 p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onClick={toggleSortOrder}
+          >
+            {ascending ? "↑" : "↓"}
+          </button>
+          <button
+            className="bg-green-600 text-white px-8 py-3 rounded-lg shadow-md hover:bg-green-700 transition-all"
+            onClick={handleSearch}
+          >
             Search
           </button>
         </div>
       </div>
 
-      <div className="px-4 sm:px-6 lg:px-8 w-[80%] mx-auto flex-grow">
-        {DummyData.length > 0 ? (
+      <div className="px-4 sm:px-6 lg:px-8 md:w-[80%] w-full mx-auto flex-grow">
+        {searchResults.length > 0 ? (
           <Fragment>
             <h3 className="text-2xl font-semibold text-gray-800 mb-6">
               Search Results
             </h3>
             <div className="flex flex-col space-y-6">
-              {DummyData.map((result) => (
+              {searchResults.map((result) => (
                 <div
                   key={result.id}
                   className="bg-white rounded-lg shadow-md p-6 flex flex-col space-y-4 hover:shadow-lg transition-shadow w-full"
                 >
-                  {/* Drug and Pharmacy Info */}
                   <div className="flex justify-between items-center">
-                    {/* Left Content */}
                     <div className="flex flex-col space-y-2">
                       <h4 className="text-lg font-bold text-gray-800">
                         {result.drugName}
@@ -116,9 +159,6 @@ const CustomerSearchPage = () => {
                       <p className="text-sm text-gray-600">
                         {result.drugDescription}
                       </p>
-                      <button className="text-blue-500 font-medium hover:underline">
-                        Load more about drug
-                      </button>
                       <p className="text-sm text-gray-600">
                         Price:{" "}
                         <span className="font-medium">${result.price}</span>
@@ -130,12 +170,6 @@ const CustomerSearchPage = () => {
                         </span>
                       </p>
                       <p className="text-sm text-gray-600">
-                        {result.pharmacyDescription}
-                      </p>
-                      <button className="text-blue-500 font-medium hover:underline">
-                        See details about pharmacy
-                      </button>
-                      <p className="text-sm text-gray-600">
                         Rating:{" "}
                         <span className="font-medium text-yellow-500 ml-1">
                           {result.rating} ★
@@ -143,17 +177,11 @@ const CustomerSearchPage = () => {
                       </p>
                     </div>
 
-                    {/* Right Content */}
-                    <div className="flex flex-col items-end space-y-2">
-                      <p className="text-sm text-gray-600">
-                        Distance:{" "}
-                        <span className="font-medium text-gray-800">
-                          {result.distance}
-                        </span>
+                    <div className="flex flex-col items-center space-y-2 shadow-lg bg-gray-200 p-8 rounded-lg">
+                      <p className="font-bold text-gray-800 text-2xl">
+                        {result.distance}
                       </p>
-                      <button className="bg-green-600 text-white w-14 h-14 rounded-full hover:bg-green-700">
-                        GO
-                      </button>
+                      <p className="text-center">away</p>
                     </div>
                   </div>
                 </div>
