@@ -166,11 +166,7 @@ const RegistrationPage = () => {
           Join the Platform to Manage Your Pharmacy in Real-Time
         </h2>
 
-        <form
-          onSubmit={handleSubmit}
-          
-        >
-
+        <form onSubmit={handleSubmit}>
           <div>
             <label
               htmlFor="name"
