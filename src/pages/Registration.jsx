@@ -2,15 +2,12 @@ import React from "react";
 
 const RegistrationPage = () => {
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+    <div className="min-h-[80vh] bg-gray-100 flex items-center justify-center mt-16 py-4">
       <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-lg">
         <h2 className="text-2xl font-bold text-blue-900 mb-4 text-center">
           Join the Platform to Manage Your Pharmacy in Real-Time
         </h2>
-        <p className="text-sm text-gray-600 mb-6 text-center">
-          Register your pharmacy to update drug inventory, share prices, and
-          help customers find the medications they need.
-        </p>
+  
         <form>
           <div className="mb-4">
             <label
