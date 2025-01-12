@@ -145,6 +145,7 @@ const CustomerSearchPage = () => {
             <h3 className="text-2xl font-semibold text-gray-800 mb-6">
               Search Results
             </h3>
+            {}
             <div className="flex flex-col space-y-6">
               {searchResults.map((result) => (
                 <div
@@ -178,10 +179,13 @@ const CustomerSearchPage = () => {
                     </div>
 
                     <div className="flex flex-col items-center space-y-2 shadow-lg bg-gray-200 p-8 rounded-lg">
-                      <p className="font-bold text-gray-800 text-2xl">
+                      <p className="text-green-600 font-bold  text-2xl">
                         {result.distance}
                       </p>
                       <p className="text-center">away</p>
+                      <div className="bg-green-600 w-10 h-10 rounded-full flex items-center justify-center text-white">
+                        GO
+                      </div>
                     </div>
                   </div>
                 </div>

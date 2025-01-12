@@ -2,101 +2,176 @@ import React, { useContext, useState, useEffect } from "react";
 import { UserContext } from "../../contexts/UserContext";
 
 const Profile = () => {
-  const { logout } = useContext(UserContext);
-
+  const { user } = useContext(UserContext);
+  const [editing, setEditing] = useState(false);
   const [profileData, setProfileData] = useState({
-    name: "John Doe",
-    email: "john.doe@example.com",
-    pharmacyName: "HealthCare Pharmacy",
-    phone: "+1234567890",
-    address: "123 Main St, City, Country",
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+    bio: "",
   });
 
-  const [isEditing, setIsEditing] = useState(false); // State for toggling edit mode
-
-  const handleEditClick = () => {
-    setIsEditing((prev) => !prev);
-  };
-
-  const handleSave = () => {
-    setIsEditing(false);
-    // Here, you can add an API call or logic to save the data
-    console.log("Updated profile data:", profileData);
-  };
+  useEffect(() => {
+    // Simulate fetching user profile data
+    if (user) {
+      setProfileData({
+        name: user.name || "John Doe",
+        email: user.email || "johndoe@example.com",
+        phone: user.phone || "123-456-7890",
+        address: user.address || "1234 Elm Street, Anytown, USA",
+        bio:
+          user.bio || "Passionate about technology and healthcare solutions.",
+      });
+    }
+  }, [user]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setProfileData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setProfileData({ ...profileData, [name]: value });
   };
 
-  useEffect(() => {
-    // Fetch real-time data if needed
-  }, []);
+  const saveChanges = () => {
+    setEditing(false);
+    // Simulate saving the changes
+    console.log("Profile updated:", profileData);
+  };
 
   return (
-    <div className="bg-gray-50 min-h-[85vh] flex flex-col">
-      {/* Header */}
+    <div className="flex flex-col min-h-screen bg-gray-100">
       <header className="fixed top-0 w-full bg-blue-900 p-5 flex items-center justify-between shadow-lg">
-        <div className="flex items-center space-x-3">
-          <h1 className="text-3xl font-bold text-white">PharmaFinder</h1>
-        </div>
-        <button
-          className="bg-white text-blue-900 px-4 py-2 rounded-md shadow-lg hover:bg-gray-200"
-          onClick={logout}
-        >
-          Logout
-        </button>
+        <h1 className="text-3xl font-bold text-white">My Profile</h1>
       </header>
 
-      {/* Main Content */}
-      <main className="flex-grow flex items-center justify-center mt-20">
-        <div className="px-6 sm:px-8 py-8 w-[75%]">
-          <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">
-            Your Profile
-          </h1>
-
-          <div className="bg-white p-8 rounded-3xl shadow-xl flex flex-col space-y-6 border border-gray-200">
-            <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-semibold text-gray-800">
-                General Information
-              </h2>
-              <button
-                onClick={isEditing ? handleSave : handleEditClick}
-                className="text-blue-600 hover:underline"
-              >
-                {isEditing ? "Save" : "Edit"}
-              </button>
-            </div>
-
-            <div className="space-y-4">
-              {Object.entries(profileData).map(([key, value]) => (
-                <div key={key} className="flex justify-between items-center">
-                  <span className="text-gray-600 capitalize">
-                    {key.replace(/([A-Z])/g, " $1")}
-                  </span>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      name={key}
-                      value={value}
-                      onChange={handleInputChange}
-                      className="font-medium text-gray-800 border border-gray-300 p-2 rounded-md"
-                    />
-                  ) : (
-                    <span className="font-medium text-gray-800">{value}</span>
-                  )}
-                </div>
-              ))}
-            </div>
+      <main className="mt-20 p-6">
+        <div className="bg-white p-8 rounded-xl shadow-lg space-y-6">
+          <div className="flex justify-between items-center">
+            <h2 className="text-2xl font-semibold text-gray-800">
+              Profile Information
+            </h2>
+            <button
+              onClick={() => setEditing(!editing)}
+              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-all"
+            >
+              {editing ? "Cancel" : "Edit Profile"}
+            </button>
           </div>
+
+          <div className="space-y-4">
+            <div>
+              <label className="block text-gray-600">Full Name</label>
+              {editing ? (
+                <input
+                  type="text"
+                  name="name"
+                  value={profileData.name}
+                  onChange={handleInputChange}
+                  className="mt-1 p-3 w-full bg-gray-200 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              ) : (
+                <p className="text-gray-800 mt-1">{profileData.name}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-gray-600">Email</label>
+              {editing ? (
+                <input
+                  type="email"
+                  name="email"
+                  value={profileData.email}
+                  onChange={handleInputChange}
+                  className="mt-1 p-3 w-full bg-gray-200 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              ) : (
+                <p className="text-gray-800 mt-1">{profileData.email}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-gray-600">Phone Number</label>
+              {editing ? (
+                <input
+                  type="text"
+                  name="phone"
+                  value={profileData.phone}
+                  onChange={handleInputChange}
+                  className="mt-1 p-3 w-full bg-gray-200 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              ) : (
+                <p className="text-gray-800 mt-1">{profileData.phone}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-gray-600">Address</label>
+              {editing ? (
+                <input
+                  type="text"
+                  name="address"
+                  value={profileData.address}
+                  onChange={handleInputChange}
+                  className="mt-1 p-3 w-full bg-gray-200 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              ) : (
+                <p className="text-gray-800 mt-1">{profileData.address}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-gray-600">Bio</label>
+              {editing ? (
+                <textarea
+                  name="bio"
+                  value={profileData.bio}
+                  onChange={handleInputChange}
+                  className="mt-1 p-3 w-full bg-gray-200 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  rows="4"
+                ></textarea>
+              ) : (
+                <p className="text-gray-800 mt-1">{profileData.bio}</p>
+              )}
+            </div>
+
+            {editing && (
+              <div className="flex justify-end">
+                <button
+                  onClick={saveChanges}
+                  className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-all"
+                >
+                  Save Changes
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Additional Features */}
+        <div className="bg-white p-8 mt-6 rounded-xl shadow-lg space-y-6">
+          <h2 className="text-xl font-semibold text-gray-800">
+            Linked Accounts
+          </h2>
+          <div className="flex items-center space-x-4">
+            <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-all">
+              Connect Facebook
+            </button>
+            <button className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-all">
+              Connect Google
+            </button>
+          </div>
+        </div>
+
+        <div className="bg-white p-8 mt-6 rounded-xl shadow-lg space-y-6">
+          <h2 className="text-xl font-semibold text-gray-800">Activity Log</h2>
+          <ul className="list-disc ml-5 space-y-2">
+            <li>Last login: January 10, 2025, 8:45 PM</li>
+            <li>Updated bio on January 9, 2025</li>
+            <li>Connected Google account on January 8, 2025</li>
+          </ul>
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="fixed bottom-0 w-full bg-blue-900 text-white p-4 text-center mt-auto">
+      <footer className="fixed w-full bottom-0 bg-blue-900 text-white p-4 mt-8 text-center">
         <p className="text-sm">
           &copy; 2025 Pharmacy Management. All Rights Reserved.
         </p>

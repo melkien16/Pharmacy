@@ -1,8 +1,14 @@
 import React, { useContext } from "react";
 import { UserContext } from "../contexts/UserContext";
+import addDrugsToFirestore from "../DummyPharmacies/AbcPharmacy";
+import addPharmacyToDrug from "../DummyPharmacies/updateStok";
+import { Link } from "react-router-dom";
 
 const PharmacyDashboard = () => {
   const { logout } = useContext(UserContext);
+
+  const drugName = "XKYFFILDUZfzKDvHstXm";
+  const newPharmacy = { name: "Melkie", price: 9 };
 
   return (
     <div className="flex min-h-screen flex-col bg-gray-100">
@@ -23,19 +29,19 @@ const PharmacyDashboard = () => {
           <h2 className="text-2xl font-bold mb-8">Pharmacy Dashboard</h2>
           <ul className="space-y-6">
             <li>
-              <a href="#inventory" className="hover:text-blue-600">
+              <Link to="/pharmacy/inventory" className="hover:text-blue-600">
                 Manage Inventory
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#analytics" className="hover:text-blue-600">
+              <Link to="/pharmacy/analytics" className="hover:text-blue-600">
                 View Analytics
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#settings" className="hover:text-blue-600">
-                Settings
-              </a>
+              <Link to="/pharmacy/settings" className="hover:text-blue-600">
+                Account Settings
+              </Link>
             </li>
           </ul>
         </aside>
@@ -64,15 +70,23 @@ const PharmacyDashboard = () => {
           </section>
 
           <section className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <button className="bg-blue-900 text-white shadow-md rounded-md p-6 text-center hover:bg-blue-700">
+            <Link
+              to="/pharmacy/add-drug"
+              className="bg-blue-900 text-white shadow-md rounded-md p-6 text-center hover:bg-blue-700"
+              // onClick={addDrugsToFirestore}
+            >
               Add New Drug
-            </button>
-            <button className="bg-blue-900 text-white shadow-md rounded-md p-6 text-center hover:bg-blue-700">
+            </Link>
+            <Link to="/pharmacy/all-inventory" className="bg-blue-900 text-white shadow-md rounded-md p-6 text-center hover:bg-blue-700">
               View Inventory
-            </button>
-            <button className="bg-blue-900 text-white shadow-md rounded-md p-6 text-center hover:bg-blue-700">
+            </Link>
+            <Link
+              to="/pharmacy/edit-profile"
+              className="bg-blue-900 text-white shadow-md rounded-md p-6 text-center hover:bg-blue-700"
+              // onClick={() => addPharmacyToDrug(drugName, newPharmacy)}
+            >
               Edit Profile
-            </button>
+            </Link>
           </section>
 
           <section className="mt-6">
