@@ -15,7 +15,7 @@ import ViewAnalysis from "./pages/nesstedPages/ViewAnalysis";
 import AddDrug from "./pages/nesstedPages/AddDrug";
 import Setting from "./pages/nesstedPages/Setting";
 import ViewInventory from "./pages/nesstedPages/ViewInventory";
-import TestAdmin from "./pages/nestedAdmin/Prac";
+import TestAdmin from "./pages/nestedAdmin/AdminDashboatd";
 
 const ProtectedRoute = ({ children, role }) => {
   const { user } = useContext(UserContext);
