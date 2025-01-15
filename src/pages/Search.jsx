@@ -1,6 +1,7 @@
 import React, { useState, Fragment } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { sortData } from "../utils/sortData";
 
 const DummyData = [
   {
@@ -64,24 +65,11 @@ const DummyData = [
     pharmacyDescription:
       "Healthy Life Pharmacy offers a variety of vitamins and supplements.",
     price: 8,
-    availability: "In Stock",
+    availability: 90, // if < 50, "Limited Stock", if 0, "Out of Stock" else "In Stock"
     distance: "2.5 km",
     rating: 4.2,
   },
 ];
-
-const sortData = (data, key, ascending = true) => {
-  return data.sort((a, b) => {
-    let valueA = key === "distance" ? parseFloat(a[key]) : a[key];
-    let valueB = key === "distance" ? parseFloat(b[key]) : b[key];
-
-    if (ascending) {
-      return valueA > valueB ? 1 : -1;
-    } else {
-      return valueA < valueB ? 1 : -1;
-    }
-  });
-};
 
 const CustomerSearchPage = () => {
   const [searchResults, setSearchResults] = useState(DummyData);
