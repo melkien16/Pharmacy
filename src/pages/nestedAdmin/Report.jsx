@@ -18,11 +18,15 @@ const Report = () => {
         label: "Active Users",
         data: [50, 100, 150, 200, 250, 300],
         backgroundColor: "#4caf50",
+        barThickness: 50,
+        maxBarThickness: 70,
       },
       {
         label: "Registered Pharmacies",
         data: [30, 60, 90, 120, 150, 180],
         backgroundColor: "#2196f3",
+        barThickness: 50, 
+        maxBarThickness: 70,
       },
     ],
   };
@@ -37,7 +41,7 @@ const Report = () => {
   };
 
   return (
-    <main className="flex-grow bg-gray-100 p-6">
+    <main className="flex-grow bg-gray-100">
       <div className="bg-white p-4 rounded-md shadow-md mb-6">
         <h2 className="text-lg font-bold mb-4">User and Pharmacy Statistics</h2>
         <Bar data={data} options={options} />
