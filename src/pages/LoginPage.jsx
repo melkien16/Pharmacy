@@ -1,4 +1,5 @@
 import React, { useState, useContext, Fragment } from "react";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 import Header from "../components/Header";
@@ -91,9 +92,9 @@ const LoginPage = () => {
           </form>
           <p className="text-sm text-center mt-4">
             Don’t have an account?{" "}
-            <a href="/register" className="text-blue-700 hover:underline">
+            <Link to="/register" className="text-blue-700 hover:underline">
               Register
-            </a>
+            </Link>
           </p>
         </div>
       </div>

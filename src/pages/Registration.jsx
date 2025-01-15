@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, Fragment } from "react";
+import { Link } from "react-router-dom";
 import { db } from "../firebase";
 import { collection, addDoc } from "firebase/firestore";
 import SendEmail from "../services/SendEmail";
@@ -361,9 +362,9 @@ const RegistrationPage = () => {
 
           <p className="text-sm text-center mt-4">
             Already have an account?{" "}
-            <a href="/login" className="text-blue-700 hover:underline">
+            <Link to="/login" className="text-blue-700 hover:underline">
               Log In
-            </a>
+            </Link>
           </p>
         </div>
       </div>
