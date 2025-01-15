@@ -102,6 +102,13 @@ const CustomerSearchPage = () => {
     const sortedResults = sortData(searchResults, sortKey, !ascending);
     setSearchResults([...sortedResults]);
   };
+  const [selectedDrug, setSelectedDrug] = useState(null);
+  const [selectedPharmacy, setSelectedPharmacy] = useState(null);
+
+  const closeModal = () => {
+    setSelectedDrug(null);
+    setSelectedPharmacy(null);
+  };
 
   return (
     <Fragment>
@@ -149,7 +156,6 @@ const CustomerSearchPage = () => {
               <h3 className="text-2xl font-semibold text-gray-800 mb-6">
                 Search Results
               </h3>
-              {}
               <div className="flex flex-col space-y-6">
                 {searchResults.map((result) => (
                   <div
@@ -180,10 +186,24 @@ const CustomerSearchPage = () => {
                             {result.rating} ★
                           </span>
                         </p>
+                        <div className="flex space-x-4 mt-4">
+                          <button
+                            className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-all"
+                            onClick={() => setSelectedPharmacy(result)}
+                          >
+                            View Drug Details
+                          </button>
+                          <button
+                            className="bg-purple-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-purple-600 transition-all"
+                            onClick={() => setSelectedDrug(result)}
+                          >
+                            View Pharmacy Profile
+                          </button>
+                        </div>
                       </div>
 
                       <div className="flex flex-col items-center space-y-2 shadow-lg bg-gray-200 p-8 rounded-lg">
-                        <p className="text-green-600 font-bold  text-2xl">
+                        <p className="text-green-600 font-bold text-2xl">
                           {result.distance}
                         </p>
                         <p className="text-center">away</p>
@@ -208,6 +228,74 @@ const CustomerSearchPage = () => {
           )}
         </div>
       </div>
+
+      {/* Drug Details Modal */}
+      {selectedDrug && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+          onClick={closeModal}
+        >
+          <div
+            className="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="text-xl font-semibold text-gray-800 mb-4">
+              Drug Details
+            </h3>
+            <p className="text-gray-600 mb-2">
+              <strong>Name:</strong> {selectedDrug.drugName}
+            </p>
+            <p className="text-gray-600 mb-2">
+              <strong>Description:</strong> {selectedDrug.drugDescription}
+            </p>
+            <p className="text-gray-600 mb-2">
+              <strong>Price:</strong> ${selectedDrug.price}
+            </p>
+            <p className="text-gray-600 mb-4">
+              <strong>Availability:</strong> {selectedDrug.availability}
+            </p>
+            <button
+              className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600 transition-all"
+              onClick={closeModal}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Pharmacy Profile Modal */}
+      {selectedPharmacy && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+          onClick={closeModal}
+        >
+          <div
+            className="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="text-xl font-semibold text-gray-800 mb-4">
+              Pharmacy Profile
+            </h3>
+            <p className="text-gray-600 mb-2">
+              <strong>Name:</strong> {selectedPharmacy.pharmacyName}
+            </p>
+            <p className="text-gray-600 mb-2">
+              <strong>Description:</strong>{" "}
+              {selectedPharmacy.pharmacyDescription}
+            </p>
+            <p className="text-gray-600 mb-4">
+              <strong>Distance:</strong> {selectedPharmacy.distance}
+            </p>
+            <button
+              className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600 transition-all"
+              onClick={closeModal}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
       <Footer />
     </Fragment>
   );
