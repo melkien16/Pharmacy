@@ -27,19 +27,6 @@ const ApprovalPage = () => {
 
   return (
     <main className="flex-grow p-6">
-      {/* Header */}
-      <header className="flex items-center justify-between p-4 bg-white shadow-md rounded-md mb-6">
-        <h2 className="text-xl font-bold">Approve Pharmacies</h2>
-        <div className="flex items-center space-x-4">
-          <img
-            src="https://via.placeholder.com/40"
-            alt="Admin Avatar"
-            className="w-10 h-10 rounded-full border"
-          />
-        </div>
-      </header>
-
-      {/* Pharmacies Table */}
       <section className="bg-white shadow-md p-6 rounded-md">
         <h3 className="text-lg font-semibold text-gray-700 mb-4">
           Pending Pharmacy Approvals

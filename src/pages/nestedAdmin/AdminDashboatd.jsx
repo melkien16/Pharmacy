@@ -68,6 +68,11 @@ const TestAdmin = () => {
           </h1>
           <div className="flex items-center space-x-4">
             <FaBell className="text-2xl cursor-pointer hover:text-blue-900" />
+            <img
+              src="https://via.placeholder.com/40"
+              alt="Admin Avatar"
+              className="w-10 h-10 rounded-full border"
+            />
           </div>
         </header>
         {selectedTab === "admin" && <AdminDashboard />}

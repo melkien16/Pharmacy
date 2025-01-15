@@ -23,11 +23,6 @@ const Admin = () => {
         </h2>
         <div className="flex items-center space-x-4">
           <FaBell className="text-blue-900 text-xl cursor-pointer" />
-          <img
-            src="https://via.placeholder.com/40"
-            alt="Admin Avatar"
-            className="w-10 h-10 rounded-full border"
-          />
         </div>
       </header>
 

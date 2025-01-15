@@ -25,8 +25,6 @@ const AdminSetting = () => {
 
   return (
     <main className="flex-grow p-8">
-      <h1 className="text-3xl font-bold mb-6">System Settings</h1>
-
       {/* Email Notifications */}
       <div className="bg-white p-6 rounded-md shadow-md mb-6">
         <h2 className="text-xl font-semibold mb-4">Email Notifications</h2>
