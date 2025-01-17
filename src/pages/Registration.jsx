@@ -27,9 +27,9 @@ const RegistrationPage = () => {
     confirmPassword: "",
     address: "",
     contact: "",
-    registrationNumber: "",
     openingTime: "",
     closingTime: "",
+    bio: "",
     ban: false,
   });
 
@@ -59,12 +59,12 @@ const RegistrationPage = () => {
       owner: formData.owner,
       email: formData.email,
       password: formData.password,
-      location: formData.address,
+      address: formData.address,
       phone: formData.contact,
-      reg_no: formData.registrationNumber,
       opening_time: formData.openingTime,
       closing_time: formData.closingTime,
       ban: false,
+      bio: formData.bio,
     };
 
     setIsLoading(true);
@@ -81,9 +81,9 @@ const RegistrationPage = () => {
         confirmPassword: "",
         address: "",
         contact: "",
-        registrationNumber: "",
         openingTime: "",
         closingTime: "",
+        bio: "",
         ban: false,
       });
     } catch (error) {
@@ -343,17 +343,16 @@ const RegistrationPage = () => {
 
             <div>
               <label
-                htmlFor="registrationNumber"
+                htmlFor="bio"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                Business Registration Number (Optional)
+                Bio
               </label>
-              <input
-                type="text"
-                id="registrationNumber"
-                value={formData.registrationNumber}
+              <textarea
+                id="bio"
+                value={formData.bio}
                 onChange={handleChange}
-                placeholder="Enter registration number"
+                placeholder="Enter a bio about your pharmacy"
                 className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
               />
             </div>

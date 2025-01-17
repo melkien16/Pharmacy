@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { UserContext } from "../../contexts/UserContext";
 import {
   FaCogs,
   FaHome,
@@ -19,6 +20,7 @@ import AdminDashboard from "./MainAdmin";
 
 const TestAdmin = () => {
   const [selectedTab, setSelectedTab] = useState("admin");
+  const {logout} = useContext(UserContext);
 
   const sidebarItems = [
     { id: "admin", label: "Admin Dashboard", icon: <FaHome /> },
@@ -51,7 +53,7 @@ const TestAdmin = () => {
             </button>
           ))}
         </nav>
-        <button className="flex items-center justify-center p-4 bg-red-600 hover:bg-red-500">
+        <button className="flex items-center justify-center p-4 bg-red-600 hover:bg-red-500" onClick={logout}>
           <IoMdLogOut className="mr-2 text-xl" />
           Logout
         </button>

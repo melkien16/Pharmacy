@@ -4,6 +4,47 @@ import { useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import fetchuser from "../DummyPharmacies/fetchuser";
+
+const fetchOwnerData = async (email, password) => {
+  try {
+    const Owner = await fetchuser("Owner");
+    const ownerUser = Owner.find(
+      (owner) => owner.email === email && owner.password === password
+    );
+    return ownerUser;
+  } catch (error) {
+    console.error("Error fetching owner data:", error);
+    return null;
+  }
+};
+
+const fetchAdminData = async (email, password) => {
+  try {
+    const Admin = await fetchuser("admin");
+    const adminUser = Admin.find(
+      (admin) => admin.email === email && admin.password === password
+    );
+    return adminUser;
+  } catch (error) {
+    console.error("Error fetching admin data:", error);
+    return null;
+  }
+};
+
+const fetchPharmacistData = async (email, password) => {
+  try {
+    const Pharmacist = await fetchuser("Pending_Pharmacies");
+    const pharmacistUser = Pharmacist.find(
+      (pharmacist) =>
+        pharmacist.email === email && pharmacist.password === password
+    );
+    return pharmacistUser;
+  } catch (error) {
+    console.error("Error fetching pharmacist data:", error);
+    return null;
+  }
+};
 
 const LoginPage = () => {
   const { login } = useContext(UserContext);
@@ -11,63 +52,16 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const adminCredentials = [
-    {
-      name: "Admin1",
-      email: "admin1@example.com",
-      password: "admin123",
-      role: "admin",
-    },
-    {
-      name: "Admin2",
-      email: "admin2@example.com",
-      password: "admin456",
-      role: "admin",
-    },
-  ];
-
-  const pharmacistCredentials = [
-    {
-      name: "Pharmacy1",
-      email: "pharmacy1@example.com",
-      password: "pharmacy123",
-      role: "pharmacist",
-      phone: "1234567890",
-      address: "123 Pharmacy Street",
-      bio: "Pharmacy1 is a pharmacist."
-    },
-    {
-      name: "Pharmacy2",
-      email: "pharmacy2@example.com",
-      password: "pharmacy456",
-      role: "pharmacist",
-      phone: "0946157251",
-      address: "456 Pharmacy Street",
-      bio: "Pharmacy2 is a pharmacist."
-    },
-    {
-      name: "Pharmacy3",
-      email: "pharmacy3@example.com",
-      password: "pharmacy789",
-      role: "pharmacist",
-      phone: "0920839188",
-      address: "789 Pharmacy Street",
-      bio: "Pharmacy3 is a pharmacist."
-    },
-  ];
-
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
+    const ownerUser = await fetchOwnerData(email, password);
+    const adminUser = await fetchAdminData(email, password);
+    const pharmacistUser = await fetchPharmacistData(email, password);
 
-    const adminUser = adminCredentials.find(
-      (admin) => admin.email === email && admin.password === password
-    );
-
-    const pharmacistUser = pharmacistCredentials.find(
-      (pharmacy) => pharmacy.email === email && pharmacy.password === password
-    );
-
-    if (adminUser) {
+    if (ownerUser) {
+      login(ownerUser);
+      navigate("/admin");
+    } else if (adminUser) {
       login(adminUser);
       navigate("/admin");
     } else if (pharmacistUser) {
