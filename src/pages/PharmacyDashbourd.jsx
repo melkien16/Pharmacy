@@ -5,7 +5,7 @@ import addPharmacyToDrug from "../DummyPharmacies/updateStok";
 import { Link } from "react-router-dom";
 
 const PharmacyDashboard = () => {
-  const { logout } = useContext(UserContext);
+  const { logout, user } = useContext(UserContext);
 
   const drugName = "XKYFFILDUZfzKDvHstXm";
   const newPharmacy = { name: "Melkie", price: 9 };
@@ -48,7 +48,7 @@ const PharmacyDashboard = () => {
 
         <main className="flex-1 bg-gray-50 p-8">
           <header className="flex justify-between items-center pb-4 border-b border-gray-300">
-            <h1 className="text-2xl font-bold">Welcome to Your Dashboard</h1>
+            <h1 className="text-2xl font-bold">Welcome {user.name}</h1>
             <button className="lg:hidden bg-blue-900 text-white px-4 py-2 rounded-md">
               Menu
             </button>
@@ -77,13 +77,15 @@ const PharmacyDashboard = () => {
             >
               Add New Drug
             </Link>
-            <Link to="/pharmacy/all-inventory" className="bg-blue-900 text-white shadow-md rounded-md p-6 text-center hover:bg-blue-700">
+            <Link
+              to="/pharmacy/all-inventory"
+              className="bg-blue-900 text-white shadow-md rounded-md p-6 text-center hover:bg-blue-700"
+            >
               View Inventory
             </Link>
             <Link
               to="/pharmacy/edit-profile"
               className="bg-blue-900 text-white shadow-md rounded-md p-6 text-center hover:bg-blue-700"
-              // onClick={() => addPharmacyToDrug(drugName, newPharmacy)}
             >
               Edit Profile
             </Link>

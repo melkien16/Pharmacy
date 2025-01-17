@@ -11,31 +11,67 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const adminCredentials = {
-    email: "admin@example.com",
-    password: "admin123",
-    role: "admin",
-  };
-  const pharmacistCredentials = {
-    email: "pharmacist@example.com",
-    password: "pharmacist123",
-    role: "pharmacist",
-  };
+  const adminCredentials = [
+    {
+      name: "Admin1",
+      email: "admin1@example.com",
+      password: "admin123",
+      role: "admin",
+    },
+    {
+      name: "Admin2",
+      email: "admin2@example.com",
+      password: "admin456",
+      role: "admin",
+    },
+  ];
+
+  const pharmacistCredentials = [
+    {
+      name: "Pharmacy1",
+      email: "pharmacy1@example.com",
+      password: "pharmacy123",
+      role: "pharmacist",
+      phone: "1234567890",
+      address: "123 Pharmacy Street",
+      bio: "Pharmacy1 is a pharmacist."
+    },
+    {
+      name: "Pharmacy2",
+      email: "pharmacy2@example.com",
+      password: "pharmacy456",
+      role: "pharmacist",
+      phone: "0946157251",
+      address: "456 Pharmacy Street",
+      bio: "Pharmacy2 is a pharmacist."
+    },
+    {
+      name: "Pharmacy3",
+      email: "pharmacy3@example.com",
+      password: "pharmacy789",
+      role: "pharmacist",
+      phone: "0920839188",
+      address: "789 Pharmacy Street",
+      bio: "Pharmacy3 is a pharmacist."
+    },
+  ];
 
   const handleLogin = (e) => {
     e.preventDefault();
 
-    if (
-      email === adminCredentials.email &&
-      password === adminCredentials.password
-    ) {
-      login(adminCredentials);
+    const adminUser = adminCredentials.find(
+      (admin) => admin.email === email && admin.password === password
+    );
+
+    const pharmacistUser = pharmacistCredentials.find(
+      (pharmacy) => pharmacy.email === email && pharmacy.password === password
+    );
+
+    if (adminUser) {
+      login(adminUser);
       navigate("/admin");
-    } else if (
-      email === pharmacistCredentials.email &&
-      password === pharmacistCredentials.password
-    ) {
-      login(pharmacistCredentials); // Set user context
+    } else if (pharmacistUser) {
+      login(pharmacistUser);
       navigate("/pharmacy");
     } else {
       alert("Invalid email or password. Please try again.");
