@@ -13,7 +13,6 @@ const Profile = () => {
   });
 
   useEffect(() => {
-    // Simulate fetching user profile data
     if (user) {
       setProfileData({
         name: user.name || "John Doe",
@@ -33,7 +32,6 @@ const Profile = () => {
 
   const saveChanges = () => {
     setEditing(false);
-    // Simulate saving the changes
     console.log("Profile updated:", profileData);
   };
 

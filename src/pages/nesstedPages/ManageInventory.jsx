@@ -4,7 +4,6 @@ import { UserContext } from "../../contexts/UserContext";
 const ManageInventory = () => {
   const { logout } = useContext(UserContext);
 
-  // Update handler for price and quantity
   const handleUpdate = (id, field, value) => {
     setInventory((prevInventory) =>
       prevInventory.map((item) =>
@@ -13,7 +12,6 @@ const ManageInventory = () => {
     );
   };
 
-  // Dummy data for inventory (replace with real data from API or database)
   const [inventory, setInventory] = useState([
     {
       id: 1,
@@ -46,12 +44,10 @@ const ManageInventory = () => {
     availability: "In Stock",
   });
 
-  // Handle search input change
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
 
-  // Handle adding a new drug
   const handleAddDrug = (e) => {
     e.preventDefault();
     const id = inventory.length + 1;
@@ -92,7 +88,7 @@ const ManageInventory = () => {
               <th className="p-4 text-left">ID</th>
               <th className="p-4 text-left">Name</th>
               <th className="p-4 text-left">Category</th>
-              <th className="p-4 text-left">Price ($)</th>
+              <th className="p-4 text-left">Price (ETB)</th>
               <th className="p-4 text-left">Quantity</th>
               <th className="p-4 text-left">Status</th>
               <th className="p-4 text-left">Actions</th>
@@ -146,8 +142,12 @@ const ManageInventory = () => {
                       <span className="text-red-500 font-bold">
                         Out of Stock
                       </span>
-                    ) : (
+                    ) : item.quantity < 20 ? (
+                      <span className="text-yellow-300 font-bold">Low Stock</span>
+                    ) : item.quantity >= 20 ? (
                       <span className="text-green-500 font-bold">In Stock</span>
+                    ):(
+                      <span className="text-red-500 font-bold">Out of Stock</span>
                     )}
                   </td>
                   <td className="px-4 py-2 border-b">

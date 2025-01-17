@@ -4,19 +4,6 @@ import { FaBell } from "react-icons/fa";
 const ViewFeedbacks = () => {
   return (
     <main className="flex-grow p-6">
-      <header className="flex items-center justify-between p-4 bg-white shadow-md rounded-md mb-6">
-        <h2 className="text-xl font-bold">Feedback Management</h2>
-        <div className="flex items-center space-x-4">
-          <FaBell className="text-blue-900 text-xl cursor-pointer" />
-          <img
-            src="https://via.placeholder.com/40"
-            alt="Admin Avatar"
-            className="w-10 h-10 rounded-full border"
-          />
-        </div>
-      </header>
-
-      {/* Feedback Table */}
       <section className="bg-white shadow-md p-4 rounded-md">
         <h3 className="text-lg font-semibold text-gray-700 mb-4">
           Received Feedback
