@@ -25,6 +25,13 @@ const UserManagement = () => {
     },
   ]);
 
+  const [newUser, setNewUser] = useState({
+    name: "",
+    email: "",
+    role: "User",
+    status: "Active",
+  });
+
   const handleRoleChange = (id, newRole) => {
     setUsers((prevUsers) =>
       prevUsers.map((user) =>
@@ -50,8 +57,81 @@ const UserManagement = () => {
     setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
   };
 
+  const handleAddUser = () => {
+    const newId = users.length + 1;
+    setUsers([...users, { ...newUser, id: newId }]);
+    setNewUser({
+      name: "",
+      email: "",
+      role: "User",
+      status: "Active",
+    });
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewUser({
+      ...newUser,
+      [name]: value,
+    });
+  };
+
   return (
     <div className="flex-grow p-6 bg-gray-100">
+      <div className="mb-6">
+        <h2 className="text-2xl mb-4">Add New User</h2>
+        <div className="mb-2">
+          <label className="block mb-1">Name:</label>
+          <input
+            type="text"
+            name="name"
+            value={newUser.name}
+            onChange={handleInputChange}
+            className="border p-2 w-full rounded-md"
+          />
+        </div>
+        <div className="mb-2">
+          <label className="block mb-1">Email:</label>
+          <input
+            type="email"
+            name="email"
+            value={newUser.email}
+            onChange={handleInputChange}
+            className="border p-2 w-full rounded-md"
+          />
+        </div>
+        <div className="mb-2">
+          <label className="block mb-1">Role:</label>
+          <select
+            name="role"
+            value={newUser.role}
+            onChange={handleInputChange}
+            className="border p-2 w-full rounded-md"
+          >
+            <option value="User">User</option>
+            <option value="Admin">Admin</option>
+          </select>
+        </div>
+        <div className="mb-4">
+          <label className="block mb-1">Status:</label>
+          <select
+            name="status"
+            value={newUser.status}
+            onChange={handleInputChange}
+            className="border p-2 w-full rounded-md"
+          >
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
+        <button
+          onClick={handleAddUser}
+          className="bg-blue-500 text-white px-4 py-2 rounded-md"
+        >
+          Add User
+        </button>
+      </div>
+
       <table className="w-full bg-white shadow-md rounded-md">
         <thead className="bg-blue-900 text-white">
           <tr>
@@ -73,14 +153,7 @@ const UserManagement = () => {
               <td className="px-4 py-2 border-b">{user.name}</td>
               <td className="px-4 py-2 border-b">{user.email}</td>
               <td className="px-4 py-2 border-b">
-                <select
-                  value={user.role}
-                  onChange={(e) => handleRoleChange(user.id, e.target.value)}
-                  className="border p-1 rounded-md"
-                >
-                  <option value="User">User</option>
-                  <option value="Admin">Admin</option>
-                </select>
+                {user.role}
               </td>
               <td className="px-4 py-2 border-b">
                 <button
