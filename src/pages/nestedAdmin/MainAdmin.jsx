@@ -14,19 +14,6 @@ const Admin = () => {
 
   return (
     <div className="flex-grow p-6">
-      {/* Header */}
-      <header className="flex items-center justify-between p-4 bg-white shadow-md rounded-md mb-6">
-        <h2 className="text-xl font-bold">
-          {isSelect === "admin" && "Admin Dashboard"}
-          {isSelect === "approval" && "Approve Pharmacies"}
-          {isSelect === "feedback" && "View Feedback"}
-        </h2>
-        <div className="flex items-center space-x-4">
-          <FaBell className="text-blue-900 text-xl cursor-pointer" />
-        </div>
-      </header>
-
-      {/* Stats Overview */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <div className="bg-white shadow-md p-4 rounded-md">
           <h3 className="text-gray-700 font-semibold">Total Pharmacies</h3>
