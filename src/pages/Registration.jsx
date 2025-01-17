@@ -1,14 +1,18 @@
 import React, { useState, useEffect, useRef, Fragment } from "react";
 import { Link } from "react-router-dom";
 import { db } from "../firebase";
-import { collection, addDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore"; // Import setDoc and doc
 import SendEmail from "../services/SendEmail";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
-const registerPharmacy = async (pharmacyData) => {
+const registerPharmacy = async (pharmacyData, name) => {
   try {
-    await addDoc(collection(db, "Pending_Pharmacies"), pharmacyData);
+    const customId = name.replace(/\s+/g, ""); // This removes all spaces
+
+    const docRef = doc(db, "Pending_Pharmacies", customId);
+
+    await setDoc(docRef, pharmacyData);
   } catch (e) {
     throw e;
   }
@@ -26,6 +30,7 @@ const RegistrationPage = () => {
     registrationNumber: "",
     openingTime: "",
     closingTime: "",
+    ban: false,
   });
 
   const [status, setStatus] = useState(false);
@@ -59,11 +64,12 @@ const RegistrationPage = () => {
       reg_no: formData.registrationNumber,
       opening_time: formData.openingTime,
       closing_time: formData.closingTime,
+      ban: false,
     };
 
     setIsLoading(true);
     try {
-      await registerPharmacy(pharmacyData);
+      await registerPharmacy(pharmacyData, formData.name);
       SendEmail(formData.email, formData.name);
       setStatus(true);
       setError("");
@@ -78,6 +84,7 @@ const RegistrationPage = () => {
         registrationNumber: "",
         openingTime: "",
         closingTime: "",
+        ban: false,
       });
     } catch (error) {
       setError(`Error: ${error.message}`);
