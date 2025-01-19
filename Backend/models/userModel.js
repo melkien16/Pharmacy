@@ -16,7 +16,7 @@ const User = {
     db.query(query, values, callback);
   },
   findAll: (callback) => {
-    const query = `SELECT id, name, email, phone, address, bio, role, fullcontrol FROM users`;
+    const query = `SELECT id, name, email, phone, password, address, bio, role, fullcontrol FROM users`;
     db.query(query, callback);
   },
   findById: (id, callback) => {
