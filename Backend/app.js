@@ -5,7 +5,12 @@ const userRoutes = require("./routes/userRoutes");
 const drugStoreRoutes = require("./routes/drugStoreRoutes");
 require("dotenv").config();
 
+const cors = require("cors"); // Import cors
+
 const app = express();
+
+// Enable CORS for all origins
+app.use(cors());
 
 // Middleware to parse incoming JSON requests
 app.use(express.json());
