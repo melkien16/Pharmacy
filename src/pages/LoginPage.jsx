@@ -4,49 +4,30 @@ import { useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import fetchuser from "../DummyPharmacies/fetchuser";
 
-const fetchOwnerData = async (email, password) => {
+const fetchUserData = async (url, email, password, setError, setLoading) => {
   try {
-    const Owner = await fetchuser("Owner");
-    const ownerUser = Owner.find(
-      (owner) => owner.email === email && owner.password === password
-    );
-    return ownerUser;
-  } catch (error) {
-    console.error("Error fetching owner data:", error);
-    return null;
-  }
-};
+    const response = await fetch(url);
 
-const fetchAdminData = async (email, password) => {
-  try {
-    const Admin = await fetchuser("admin");
-    const adminUser = Admin.find(
-      (admin) => admin.email === email && admin.password === password
-    );
-    return adminUser;
-  } catch (error) {
-    console.error("Error fetching admin data:", error);
-    return null;
-  }
-};
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
 
-const fetchPharmacistData = async (email, password) => {
-  try {
-    const Pharmacist = await fetchuser("Pending_Pharmacies");
-    const pharmacistUser = Pharmacist.find(
-      (pharmacist) =>
-        pharmacist.email === email && pharmacist.password === password
+    const data = await response.json();
+    return data.find(
+      (user) => user.email === email && user.password === password
     );
-    return pharmacistUser;
   } catch (error) {
-    console.error("Error fetching pharmacist data:", error);
-    return null;
+    setError(error);
+  } finally {
+    setLoading(false);
   }
 };
 
 const LoginPage = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   const { login } = useContext(UserContext);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -54,18 +35,28 @@ const LoginPage = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const ownerUser = await fetchOwnerData(email, password);
-    const adminUser = await fetchAdminData(email, password);
-    const pharmacistUser = await fetchPharmacistData(email, password);
+    setLoading(true); // Set loading to true when login attempt starts
 
-    if (ownerUser) {
-      login(ownerUser);
-      navigate("/admin");
-    } else if (adminUser) {
+    const adminUser = await fetchUserData(
+      "http://localhost:5000/api/users",
+      email,
+      password,
+      setError,
+      setLoading
+    );
+    const pharmacyUser = await fetchUserData(
+      "http://localhost:5000/api/pharmacies",
+      email,
+      password,
+      setError,
+      setLoading
+    );
+
+    if (adminUser) {
       login(adminUser);
       navigate("/admin");
-    } else if (pharmacistUser) {
-      login(pharmacistUser);
+    } else if (pharmacyUser) {
+      login(pharmacyUser);
       navigate("/pharmacy");
     } else {
       alert("Invalid email or password. Please try again.");
@@ -116,10 +107,14 @@ const LoginPage = () => {
             <button
               type="submit"
               className="w-full bg-blue-700 text-white py-2 rounded-md hover:bg-blue-800 transition"
+              disabled={loading} // Disable button while loading
             >
-              Log In
+              {loading ? "Logging in..." : "Log In"}
             </button>
           </form>
+          {error && (
+            <p className="text-red-500 text-center mt-4">{error.message}</p>
+          )}
           <p className="text-sm text-center mt-4">
             Don’t have an account?{" "}
             <Link to="/register" className="text-blue-700 hover:underline">
