@@ -1,22 +1,10 @@
 import React, { useState, useEffect, useRef, Fragment } from "react";
+import axios from "axios";
+
 import { Link } from "react-router-dom";
-import { db } from "../firebase";
-import { doc, setDoc } from "firebase/firestore"; // Import setDoc and doc
 import SendEmail from "../services/SendEmail";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-
-const registerPharmacy = async (pharmacyData, name) => {
-  try {
-    const customId = name.replace(/\s+/g, ""); // This removes all spaces
-
-    const docRef = doc(db, "Pending_Pharmacies", customId);
-
-    await setDoc(docRef, pharmacyData);
-  } catch (e) {
-    throw e;
-  }
-};
 
 const RegistrationPage = () => {
   const [formData, setFormData] = useState({
@@ -31,6 +19,9 @@ const RegistrationPage = () => {
     closingTime: "",
     bio: "",
     ban: false,
+    rating: 0,
+    role: "pharmacist",
+    status: "pending",
   });
 
   const [status, setStatus] = useState(false);
@@ -54,23 +45,33 @@ const RegistrationPage = () => {
       return;
     }
 
+    setIsLoading(true);
+
     const pharmacyData = {
       name: formData.name,
       owner: formData.owner,
       email: formData.email,
       password: formData.password,
+      confirmPassword: formData.confirmPassword,
       address: formData.address,
-      phone: formData.contact,
-      opening_time: formData.openingTime,
-      closing_time: formData.closingTime,
-      ban: false,
+      contact: formData.contact,
+      openingTime: formData.openingTime,
+      closingTime: formData.closingTime,
       bio: formData.bio,
+      ban: false,
+      rating: 0,
+      role: "pharmacist",
+      status: "pending",
     };
 
-    setIsLoading(true);
     try {
-      await registerPharmacy(pharmacyData, formData.name);
+      await axios.post(
+        "http://localhost:5000/api/pharmacies/register",
+        pharmacyData
+      );
+
       SendEmail(formData.email, formData.name);
+
       setStatus(true);
       setError("");
       setFormData({
@@ -85,9 +86,16 @@ const RegistrationPage = () => {
         closingTime: "",
         bio: "",
         ban: false,
+        rating: 0,
+        role: "pharmacist",
+        status: "pending",
       });
     } catch (error) {
-      setError(`Error: ${error.message}`);
+      console.error(
+        "Error registering pharmacy:",
+        error.response?.data || error.message
+      );
+      alert("Failed to register pharmacy. Please try again.");
     } finally {
       setIsLoading(false);
     }
