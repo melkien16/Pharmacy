@@ -15,11 +15,6 @@ app.use(cors());
 // Middleware to parse incoming JSON requests
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("Welcome to the Pharmacy API!");
-});
-
-
 // Set up routes
 app.use("/api/pharmacies", pharmacyRoutes); // Pharmacy-related routes
 app.use("/api/users", userRoutes); // User-related routes
