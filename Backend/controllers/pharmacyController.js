@@ -6,9 +6,9 @@ const createPharmacy = async (req, res) => {
   const pharmacy = req.body;
 
   try {
-    const hashedPassword = await bcrypt.hash(pharmacy.password, 10);
-    pharmacy.password = hashedPassword;
-    pharmacy.confirmPassword = hashedPassword;
+    // const hashedPassword = await bcrypt.hash(pharmacy.password, 10);
+    // pharmacy.password = hashedPassword;
+    // pharmacy.confirmPassword = hashedPassword;
 
     Pharmacy.create(pharmacy, (err, results) => {
       if (err)
