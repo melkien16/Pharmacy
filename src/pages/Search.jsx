@@ -1,98 +1,83 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { sortData } from "../utils/sortData";
 
-const DummyData = [
-  {
-    id: 1,
-    drugName: "Paracetamol",
-    drugDescription:
-      "Paracetamol is commonly used to treat fever and mild to moderate pain.",
-    pharmacyName: "ABC Pharmacy",
-    pharmacyDescription:
-      "ABC Pharmacy is known for its wide range of affordable medications.",
-    price: 10,
-    availability: "In Stock",
-    distance: "2 km",
-    rating: 4.5,
-  },
-  {
-    id: 2,
-    drugName: "Ibuprofen",
-    drugDescription:
-      "Ibuprofen helps reduce inflammation, pain, and fever effectively.",
-    pharmacyName: "HealthPlus Pharmacy",
-    pharmacyDescription:
-      "HealthPlus Pharmacy provides premium healthcare products and services.",
-    price: 15,
-    availability: "Limited Stock",
-    distance: "1.5 km",
-    rating: 4.0,
-  },
-  {
-    id: 3,
-    drugName: "Amoxicillin",
-    drugDescription:
-      "Amoxicillin is an antibiotic used to treat various bacterial infections.",
-    pharmacyName: "CityCare Pharmacy",
-    pharmacyDescription:
-      "CityCare Pharmacy offers reliable pharmacy services with fast delivery.",
-    price: 20,
-    availability: "Out of Stock",
-    distance: "3.2 km",
-    rating: 3.8,
-  },
-  {
-    id: 4,
-    drugName: "Cough Syrup",
-    drugDescription:
-      "Cough syrup provides relief from cough and throat irritation.",
-    pharmacyName: "Wellness Pharmacy",
-    pharmacyDescription:
-      "Wellness Pharmacy specializes in holistic health products and services.",
-    price: 12,
-    availability: "In Stock",
-    distance: "0.8 km",
-    rating: 4.7,
-  },
-  {
-    id: 5,
-    drugName: "Vitamin C",
-    drugDescription:
-      "Vitamin C supplements boost immunity and improve overall health.",
-    pharmacyName: "Healthy Life Pharmacy",
-    pharmacyDescription:
-      "Healthy Life Pharmacy offers a variety of vitamins and supplements.",
-    price: 8,
-    availability: 90, // if < 50, "Limited Stock", if 0, "Out of Stock" else "In Stock"
-    distance: "2.5 km",
-    rating: 4.2,
-  },
-];
+const fetchPharmacyById = async (id) => {
+  try {
+    const response = await fetch(`http://localhost:5000/api/pharmacies/${id}`);
+    if (!response.ok) throw new Error("Pharmacy not found");
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching pharmacy:", error);
+    return null;
+  }
+};
+
+const fetchDrugs = async () => {
+  try {
+    const response = await fetch("http://localhost:5000/api/drugstore");
+    if (!response.ok) throw new Error("Failed to fetch drugs");
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching drugs:", error);
+    return [];
+  }
+};
 
 const CustomerSearchPage = () => {
-  const [searchResults, setSearchResults] = useState(DummyData);
+  const [searchResults, setSearchResults] = useState([]);
+  const [pharmacies, setPharmacies] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
   const [sortKey, setSortKey] = useState("distance");
   const [ascending, setAscending] = useState(true);
+  const [selectedDrug, setSelectedDrug] = useState(null);
+  const [selectedPharmacy, setSelectedPharmacy] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch Drugs Data
+  useEffect(() => {
+    const loadDrugs = async () => {
+      setLoading(true);
+      const drugs = await fetchDrugs();
+      setSearchResults(drugs.length > 0 ? drugs : []);
+      setLoading(false);
+    };
+    loadDrugs();
+  }, []);
+
+  // Fetch Pharmacy Data
+  useEffect(() => {
+    const loadPharmacies = async () => {
+      const newPharmacies = {};
+      for (const result of searchResults) {
+        if (result.pharmacyID && !newPharmacies[result.pharmacyID]) {
+          const pharmacy = await fetchPharmacyById(result.pharmacyID);
+          if (pharmacy) newPharmacies[result.pharmacyID] = pharmacy;
+        }
+      }
+      setPharmacies(newPharmacies);
+    };
+    if (searchResults.length > 0) loadPharmacies();
+  }, [searchResults]);
 
   const handleSearch = () => {
-    const filteredResults = DummyData.filter((item) =>
-      item.drugName.toLowerCase().includes(searchQuery.toLowerCase())
+    const filteredResults = searchResults.filter((item) =>
+      item.drug_name.toLowerCase().includes(searchQuery.toLowerCase())
     );
     const sortedResults = sortData(filteredResults, sortKey, ascending);
     setSearchResults([...sortedResults]);
   };
 
+  // Toggle Sort Order
   const toggleSortOrder = () => {
     setAscending(!ascending);
     const sortedResults = sortData(searchResults, sortKey, !ascending);
     setSearchResults([...sortedResults]);
   };
-  const [selectedDrug, setSelectedDrug] = useState(null);
-  const [selectedPharmacy, setSelectedPharmacy] = useState(null);
 
+  // Close Modal
   const closeModal = () => {
     setSelectedDrug(null);
     setSelectedPharmacy(null);
@@ -102,6 +87,7 @@ const CustomerSearchPage = () => {
     <Fragment>
       <Header />
       <div className="bg-gray-50 flex flex-col min-h-[80vh] mt-16 py-2">
+        {/* Search Bar */}
         <div className="pt-12 pb-8 px-4 sm:px-6 lg:px-8 w-[50%] max-w-[80%] mx-auto">
           <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
             Search for Medications
@@ -138,8 +124,15 @@ const CustomerSearchPage = () => {
           </div>
         </div>
 
+        {/* Search Results */}
         <div className="px-4 sm:px-6 lg:px-8 md:w-[80%] w-full mx-auto flex-grow">
-          {searchResults.length > 0 ? (
+          {loading ? (
+            <div className="text-center py-20">
+              <h3 className="text-xl font-medium text-gray-700 mb-4">
+                Loading...
+              </h3>
+            </div>
+          ) : searchResults.length > 0 ? (
             <Fragment>
               <h3 className="text-2xl font-semibold text-gray-800 mb-6">
                 Search Results
@@ -153,10 +146,10 @@ const CustomerSearchPage = () => {
                     <div className="flex justify-between items-center">
                       <div className="flex flex-col space-y-2">
                         <h4 className="text-lg font-bold text-gray-800">
-                          {result.drugName}
+                          {result.drug_name}
                         </h4>
                         <p className="text-sm text-gray-600">
-                          {result.drugDescription}
+                          {result.description}
                         </p>
                         <p className="text-sm text-gray-600">
                           Price:{" "}
@@ -165,39 +158,39 @@ const CustomerSearchPage = () => {
                         <p className="text-sm text-gray-600">
                           Available at:{" "}
                           <span className="font-medium">
-                            {result.pharmacyName}
+                            {pharmacies[result.pharmacyID]?.name ||
+                              "Loading..."}
                           </span>
                         </p>
                         <p className="text-sm text-gray-600">
                           Rating:{" "}
                           <span className="font-medium text-yellow-500 ml-1">
-                            {result.rating} ★
+                            {pharmacies[result.pharmacyID]?.rating || "N/A"} ★
                           </span>
                         </p>
                         <div className="flex space-x-4 mt-4">
                           <button
                             className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-all"
-                            onClick={() => setSelectedPharmacy(result)}
+                            onClick={() => setSelectedDrug(result)}
                           >
                             View Drug Details
                           </button>
                           <button
                             className="bg-purple-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-purple-600 transition-all"
-                            onClick={() => setSelectedDrug(result)}
+                            onClick={() =>
+                              setSelectedPharmacy(pharmacies[result.pharmacyID])
+                            }
                           >
                             View Pharmacy Profile
                           </button>
                         </div>
                       </div>
-
-                      <div className="flex flex-col items-center space-y-2 shadow-lg bg-gray-200 p-8 rounded-lg">
-                        <p className="text-green-600 font-bold text-2xl">
-                          {result.distance}
-                        </p>
-                        <p className="text-center">away</p>
-                        <div className="bg-green-600 w-10 h-10 rounded-full flex items-center justify-center text-white">
-                          GO
+                      <div className="flex flex-col items-center justify-between h-60 w-40 rounded-lg shadow-lg overflow-hidden p-3 py-10">
+                        <div>
+                          <p className="text-3xl font-bold text-green-500 text-center">34 KM</p>
+                          <p className="text-sm text-center text-gray-500">away</p>
                         </div>
+                        <div className="h-14 w-14 flex items-center justify-center bg-green-700 rounded-full text-white font-bold text-2xl cursor-pointer hover:scale-125 transition-all duration-300">GO</div>
                       </div>
                     </div>
                   </div>
@@ -231,16 +224,27 @@ const CustomerSearchPage = () => {
               Drug Details
             </h3>
             <p className="text-gray-600 mb-2">
-              <strong>Name:</strong> {selectedDrug.drugName}
+              <strong>Name:</strong> {selectedDrug.drug_name}
             </p>
             <p className="text-gray-600 mb-2">
-              <strong>Description:</strong> {selectedDrug.drugDescription}
+              <strong>Catagory:</strong> {selectedDrug.category}
+            </p>
+            <p className="text-gray-600 mb-2">
+              <strong>Type:</strong> {selectedDrug.type}
+            </p>
+            <p className="text-gray-600 mb-2">
+              <strong>Description:</strong> {selectedDrug.description}
             </p>
             <p className="text-gray-600 mb-2">
               <strong>Price:</strong> ${selectedDrug.price}
             </p>
             <p className="text-gray-600 mb-4">
-              <strong>Availability:</strong> {selectedDrug.availability}
+              <strong>Availability:</strong>{" "}
+              {selectedDrug.quantity > 50
+                ? "In Stock"
+                : selectedDrug.quantity > 0
+                ? "Limited Stock"
+                : "Out of Stock"}
             </p>
             <button
               className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600 transition-all"
@@ -266,14 +270,29 @@ const CustomerSearchPage = () => {
               Pharmacy Profile
             </h3>
             <p className="text-gray-600 mb-2">
-              <strong>Name:</strong> {selectedPharmacy.pharmacyName}
+              <strong>Name:</strong> {selectedPharmacy.name}
             </p>
             <p className="text-gray-600 mb-2">
-              <strong>Description:</strong>{" "}
-              {selectedPharmacy.pharmacyDescription}
+              <strong>Owner:</strong> {selectedPharmacy.owner}
+            </p>
+            <p className="text-gray-600 mb-2">
+              <strong>Rating:</strong> {selectedPharmacy.rating} ★
+            </p>
+
+            <p className="text-gray-600 mb-2">
+              <strong>Opening Time:</strong> {selectedPharmacy.openingTime}
+            </p>
+            <p className="text-gray-600 mb-2">
+              <strong>Closing Time:</strong> {selectedPharmacy.closingTime}
+            </p>
+            <p className="text-gray-600 mb-2">
+              <strong>Bio:</strong> {selectedPharmacy.bio}
             </p>
             <p className="text-gray-600 mb-4">
-              <strong>Distance:</strong> {selectedPharmacy.distance}
+              <strong>Address:</strong> {selectedPharmacy.address}
+            </p>
+            <p className="text-gray-600 mb-2">
+              <strong>Contact:</strong> {selectedPharmacy.contact}
             </p>
             <button
               className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600 transition-all"
@@ -284,6 +303,7 @@ const CustomerSearchPage = () => {
           </div>
         </div>
       )}
+
       <Footer />
     </Fragment>
   );
