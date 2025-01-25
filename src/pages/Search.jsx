@@ -2,7 +2,6 @@ import React, { useState, useEffect, Fragment } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { sortData } from "../utils/sortData";
-import { getUserLocation } from "../utils/getUserLocation";
 import { haversine } from "../utils/haversine";
 
 import { use } from "react";
@@ -93,7 +92,7 @@ const CustomerSearchPage = () => {
     const combinedData = searchResults.map((result) => {
       return {
         ...result,
-        pharmacy: pharmacies[result.pharmacyID],
+        ...pharmacies[result.pharmacyID],
       };
     });
     setCombinedData(combinedData);
@@ -102,18 +101,35 @@ const CustomerSearchPage = () => {
   }, [searchResults, pharmacies]);
 
   const handleSearch = () => {
-    const filteredResults = searchResults.filter((item) =>
+    const filteredResults = combinedData.filter((item) =>
       item.drug_name.toLowerCase().includes(searchQuery.toLowerCase())
     );
     const sortedResults = sortData(filteredResults, sortKey, ascending);
-    setSearchResults([...sortedResults]);
+    setCombinedData([...sortedResults]);
   };
 
   // Toggle Sort Order
   const toggleSortOrder = () => {
     setAscending(!ascending);
-    const sortedResults = sortData(searchResults, sortKey, !ascending);
-    setSearchResults([...sortedResults]);
+    const sortedResults = sortData(combinedData, sortKey, !ascending);
+    setCombinedData([...sortedResults]);
+  };
+
+  // const handleClick = (locationName) => {
+  //   // window.open(
+  //   //   `https://www.google.com/maps?q=${latitude},${longitude}`,
+  //   //   "_blank"
+  //   // );
+  //   window.open(`https://www.google.com/maps?q=${encodeURIComponent(locationName)}`, '_blank');
+  // };
+
+  const handleClick = (startLatitude, startLongitude, destination) => {
+    window.open(
+      `https://www.google.com/maps/dir/${startLatitude},${startLongitude}/${encodeURIComponent(
+        destination
+      )}`,
+      "_blank"
+    );
   };
 
   // Close Modal
@@ -145,8 +161,8 @@ const CustomerSearchPage = () => {
               value={sortKey}
             >
               <option value="distance">Distance</option>
-              <option value="price">Price</option>
-              <option value="rating">Rating</option>
+              <option value="price">price</option>
+              <option value="rating">rating</option>
             </select>
             <button
               className="border border-gray-300 p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -177,9 +193,9 @@ const CustomerSearchPage = () => {
                 Search Results
               </h3>
               <div className="flex flex-col space-y-6">
-                {combinedData.map((result) => (
+                {combinedData.map((result, index) => (
                   <div
-                    key={result.id}
+                    key={index}
                     className="bg-white rounded-lg shadow-md p-6 flex flex-col space-y-4 hover:shadow-lg transition-shadow w-full"
                   >
                     <div className="flex justify-between items-center">
@@ -197,13 +213,13 @@ const CustomerSearchPage = () => {
                         <p className="text-sm text-gray-600">
                           Available at:{" "}
                           <span className="font-medium">
-                            {result.pharmacy?.name || "Loading..."}
+                            {result.name || "Loading..."}
                           </span>
                         </p>
                         <p className="text-sm text-gray-600">
                           Rating:{" "}
                           <span className="font-medium text-yellow-500 ml-1">
-                            {result.pharmacy?.rating || "N/A"} ★
+                            {result.rating || "N/A"} ★
                           </span>
                         </p>
                         <div className="flex space-x-4 mt-4">
@@ -226,7 +242,7 @@ const CustomerSearchPage = () => {
                       <div className="flex flex-col items-center justify-between h-60 w-40 rounded-lg shadow-lg overflow-hidden p-3 py-10">
                         <div>
                           <p className="text-4xl font-bold text-green-500 text-center">
-                            {result.pharmacy?.distance.toFixed(2) || "N/A"}{" "}
+                            {result.distance?.toFixed(2) || "N/A"}{" "}
                             <span className="text-gray-900 text-xl font-medium">
                               km
                             </span>
@@ -235,7 +251,16 @@ const CustomerSearchPage = () => {
                             away
                           </p>
                         </div>
-                        <div className="h-14 w-14 flex items-center justify-center bg-green-700 rounded-full text-white font-bold text-2xl cursor-pointer hover:scale-125 transition-all duration-300">
+                        <div
+                          className="h-14 w-14 flex items-center justify-center bg-green-700 rounded-full text-white font-bold text-2xl cursor-pointer hover:scale-125 transition-all duration-300"
+                          onClick={() =>
+                            handleClick(
+                              userLocation.latitude,
+                              userLocation.longitude,
+                              result.address
+                            )
+                          }
+                        >
                           GO
                         </div>
                       </div>

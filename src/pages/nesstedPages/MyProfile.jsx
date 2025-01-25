@@ -17,7 +17,7 @@ const Profile = () => {
       setProfileData({
         name: user.name || "John Doe",
         email: user.email || "johndoe@example.com",
-        phone: user.phone || "123-456-7890",
+        phone: user.contact || "123-456-7890",
         address: user.address || "1234 Elm Street, Anytown, USA",
         bio:
           user.bio || "Passionate about technology and healthcare solutions.",

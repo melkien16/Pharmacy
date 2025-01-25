@@ -53,10 +53,12 @@ const LoginPage = () => {
       setLoading
     );
 
+    const approvedPharmacy = pharmacyUser && pharmacyUser.status === "approved" && !pharmacyUser.ban;
+
     if (adminUser) {
       login(adminUser);
       navigate("/admin");
-    } else if (pharmacyUser) {
+    } else if (approvedPharmacy) {
       login(pharmacyUser);
       navigate("/pharmacy");
     } else {

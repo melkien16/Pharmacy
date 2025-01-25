@@ -29,6 +29,7 @@ const getAllPharmacies = (req, res) => {
   });
 };
 
+
 const getPharmacyById = (req, res) => {
   const id = req.params.id;
 
@@ -43,6 +44,16 @@ const getPharmacyById = (req, res) => {
   });
 };
 
+const getPharmaciesByStatus = (req, res) => {
+  Pharmacy.findByStatus((err, results) => {
+    if (err)
+      return res
+        .status(500)
+        .json({ message: "Error fetching pharmacies.", error: err });
+    res.json(results);
+  });
+};
+
 const updatePharmacy = (req, res) => {
   const id = req.params.id;
   const updatedPharmacy = req.body;
@@ -53,6 +64,32 @@ const updatePharmacy = (req, res) => {
         .status(500)
         .json({ message: "Error updating pharmacy.", error: err });
     res.json({ message: "Pharmacy updated successfully." });
+  });
+};
+
+const updateStatus = (req, res) => {
+  const id = req.params.id;
+  const status = req.body.status;
+
+  Pharmacy.updateStatus(id, status, (err) => {
+    if (err)
+      return res
+        .status(500)
+        .json({ message: "Error updating pharmacy status.", error: err });
+    res.json({ message: "Pharmacy status updated successfully." });
+  });
+};
+
+const updateBan = (req, res) => {
+  const id = req.params.id;
+  const ban = req.body.ban;
+
+  Pharmacy.updateBan(id, ban, (err) => {
+    if (err)
+      return res
+        .status(500)
+        .json({ message: "Error updating pharmacy ban status.", error: err });
+    res.json({ message: "Pharmacy ban status updated successfully." });
   });
 };
 
@@ -96,7 +133,10 @@ module.exports = {
   createPharmacy,
   getAllPharmacies,
   getPharmacyById,
+  getPharmaciesByStatus,
   updatePharmacy,
+  updateStatus,
+  updateBan,
   deletePharmacy,
   loginPharmacy,
 };

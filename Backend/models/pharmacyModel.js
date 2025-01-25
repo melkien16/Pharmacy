@@ -37,9 +37,9 @@ const Pharmacy = {
   },
 
   // Find pharmacies by their status
-  findByStatus: (status, callback) => {
-    const query = `SELECT * FROM Pharmacies WHERE status = ?`;
-    db.query(query, [status], callback);
+  findByStatus: (callback) => {
+    const query = `SELECT * FROM Pharmacies WHERE status = "pending"`;
+    db.query(query, callback);
   },
 
   // Find a pharmacy by its email
@@ -71,6 +71,16 @@ const Pharmacy = {
       id,
     ];
     db.query(query, values, callback);
+  },
+
+  updateStatus: (id, status, callback) => {
+    const query = `UPDATE Pharmacies SET status = ? WHERE id = ?`;
+    db.query(query, [status, id], callback);
+  },
+
+  updateBan: (id, ban, callback) => {
+    const query = `UPDATE Pharmacies SET ban = ? WHERE id = ?`;
+    db.query(query, [ban, id], callback);
   },
 
   // Delete a pharmacy
