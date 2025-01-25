@@ -52,7 +52,6 @@ const RegistrationPage = () => {
       owner: formData.owner,
       email: formData.email,
       password: formData.password,
-      confirmPassword: formData.confirmPassword,
       address: formData.address,
       contact: formData.contact,
       openingTime: formData.openingTime,
