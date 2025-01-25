@@ -1,46 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { UserContext } from "../../contexts/UserContext";
+import axios from "axios";
 
 const ViewInventory = () => {
   const [inventory, setInventory] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const { user } = useContext(UserContext);
 
-  // Simulate fetching inventory data
   useEffect(() => {
-    setInventory([
-      {
-        id: 1,
-        name: "Paracetamol",
-        category: "Painkiller",
-        type: "Tablet",
-        price: 50,
-        stock: 100,
-      },
-      {
-        id: 2,
-        name: "Amoxicillin",
-        category: "Antibiotic",
-        type: "Capsule",
-        price: 30,
-        stock: 200,
-      },
-      {
-        id: 3,
-        name: "Vitamin C",
-        category: "Vitamin",
-        type: "Tablet",
-        price: 20,
-        stock: 150,
-      },
-      // Add more dummy data as needed
-    ]);
-  }, []);
+    if (!user) return; // Ensure `user` is defined before making the API call
+
+    axios
+      .get(`http://localhost:5000/api/drugstore/${user.id}`)
+      .then((response) => {
+        
+        setInventory(response.data);
+        console.log("Inventory fetched successfully:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching inventory:", error);
+      });
+  }, [user?.id]); // Add `user.id` to the dependency array
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
 
   const filteredInventory = inventory.filter((item) =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    item.drug_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -52,7 +39,7 @@ const ViewInventory = () => {
           placeholder="Search inventory..."
           value={searchTerm}
           onChange={handleSearch}
-          className="p-2 rounded-md border focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="p-2 rounded-md border text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </header>
 
@@ -69,9 +56,9 @@ const ViewInventory = () => {
                   <th className="p-3 text-left">Name</th>
                   <th className="p-3 text-left">Category</th>
                   <th className="p-3 text-left">Type</th>
-                  <th className="p-3 text-left">Price (ETB)</th>
-                  <th className="p-3 text-left">Stock</th>
-                  <th className="p-3 text-left">Actions</th>
+                  <th className="p-3 text-right">Price (ETB)</th>
+                  <th className="p-3 text-right">Stock</th>
+                  <th className="p-3 text-center">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -79,12 +66,12 @@ const ViewInventory = () => {
                   filteredInventory.map((item, index) => (
                     <tr key={item.id} className="border-b hover:bg-gray-100">
                       <td className="p-3">{index + 1}</td>
-                      <td className="p-3">{item.name}</td>
+                      <td className="p-3">{item.drug_name}</td>
                       <td className="p-3">{item.category}</td>
                       <td className="p-3">{item.type}</td>
-                      <td className="p-3">{item.price}</td>
-                      <td className="p-3">{item.stock}</td>
-                      <td className="p-3">
+                      <td className="p-3 text-right">{item.price}</td>
+                      <td className="p-3 text-right">{item.stock}</td>
+                      <td className="p-3 text-center">
                         <button className="text-blue-600 hover:underline mr-4">
                           Edit
                         </button>

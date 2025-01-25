@@ -61,21 +61,19 @@ const AddDrug = () => {
     <div className="min-h-screen bg-gray-100 flex flex-col items-center">
       <header className="fixed top-0 w-full bg-blue-900 p-5 flex justify-between items-center text-white shadow-lg">
         <h1 className="text-2xl font-bold">PharmaFinder - Add Drug</h1>
-        <p className="text-sm">Logged in as: {user?.name || "Admin"}</p>
+        <p className="text-md font-bold">{user?.name || "Admin"}</p>
       </header>
 
-      <div className="mt-20 h-20">
-        {isLoaded && (
-          <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 w-full">
-            <p>Drug added successfully!</p>
-          </div>
-        )}
-        {error && (
-          <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 w-full">
-            <p>Error adding drug: {error.message}</p>
-          </div>
-        )}
-      </div>
+      {isLoaded && !error && (
+        <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 w-full">
+          <p>Drug added successfully!</p>
+        </div>
+      )}
+      {!isLoaded && error && (
+        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 w-full">
+          <p>Error adding drug: {error.message}</p>
+        </div>
+      )}
 
       <main className="mt-20 mb-10 w-full max-w-3xl bg-white p-8 shadow-lg rounded-lg">
         <h2 className="text-2xl font-semibold mb-6 text-gray-800">

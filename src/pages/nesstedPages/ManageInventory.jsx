@@ -1,8 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { UserContext } from "../../contexts/UserContext";
+import axios from "axios";
 
 const ManageInventory = () => {
-  const { logout } = useContext(UserContext);
+  const { logout, user } = useContext(UserContext);
+  const [inventory, setInventory] = useState([]);
 
   const handleUpdate = (id, field, value) => {
     setInventory((prevInventory) =>
@@ -12,37 +14,19 @@ const ManageInventory = () => {
     );
   };
 
-  const [inventory, setInventory] = useState([
-    {
-      id: 1,
-      name: "Paracetamol",
-      category: "Analgesic",
-      price: 10,
-      quantity: 100,
-    },
-    {
-      id: 2,
-      name: "Ibuprofen",
-      category: "Anti-inflammatory",
-      price: 15,
-      quantity: 50,
-    },
-    {
-      id: 3,
-      name: "Amoxicillin",
-      category: "Antibiotic",
-      price: 20,
-      quantity: 0,
-    },
-  ]);
+  useEffect(() => {
+    const response = axios
+      .get(`http://localhost:5000/api/drugstore/${user.id}`)
+      .then((response) => {
+        console.log(response.data);
+        setInventory(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [user.id]);
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [newDrug, setNewDrug] = useState({
-    name: "",
-    category: "",
-    price: "",
-    availability: "In Stock",
-  });
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -53,6 +37,28 @@ const ManageInventory = () => {
     const id = inventory.length + 1;
     setInventory([...inventory, { id, ...newDrug }]);
     setNewDrug({ name: "", category: "", price: "", availability: "In Stock" });
+  };
+
+  const handleSubmit = (e, item) => {
+    e.preventDefault();
+
+    const updatedDrug = {
+      price: parseFloat(item.price),
+      quantity: parseInt(item.quantity),
+    };
+
+    console.log(updatedDrug);
+
+    axios
+      .put(`http://localhost:5000/api/drugstore/${item.id}`, updatedDrug)
+      .then((response) => {
+        console.log("Drug updated successfully:", response.data);
+        alert("Drug updated successfully!");
+      })
+      .catch((error) => {
+        console.error("Error updating drug:", error);
+        alert("An error occurred while updating the drug.");
+      });
   };
 
   return (
@@ -97,7 +103,7 @@ const ManageInventory = () => {
           <tbody>
             {inventory
               .filter((drug) =>
-                drug.name.toLowerCase().includes(searchTerm.toLowerCase())
+                drug.drug_name.toLowerCase().includes(searchTerm.toLowerCase())
               )
               .map((item, index) => (
                 <tr
@@ -107,7 +113,7 @@ const ManageInventory = () => {
                   } hover:bg-gray-100`}
                 >
                   <td className="px-4 py-2 border-b">{item.id}</td>
-                  <td className="px-4 py-2 border-b">{item.name}</td>
+                  <td className="px-4 py-2 border-b">{item.drug_name}</td>
                   <td className="px-4 py-2 border-b">{item.category}</td>
                   <td className="px-4 py-2 border-b">
                     <input
@@ -143,17 +149,22 @@ const ManageInventory = () => {
                         Out of Stock
                       </span>
                     ) : item.quantity < 20 ? (
-                      <span className="text-yellow-300 font-bold">Low Stock</span>
+                      <span className="text-yellow-300 font-bold">
+                        Low Stock
+                      </span>
                     ) : item.quantity >= 20 ? (
                       <span className="text-green-500 font-bold">In Stock</span>
-                    ):(
-                      <span className="text-red-500 font-bold">Out of Stock</span>
+                    ) : (
+                      <span className="text-red-500 font-bold">
+                        Out of Stock
+                      </span>
                     )}
                   </td>
                   <td className="px-4 py-2 border-b">
                     <button
+                      type="submit"
                       className="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600"
-                      onClick={() => alert(`Updated ${item.name}`)}
+                      onClick={(e) => handleSubmit(e, item)}
                     >
                       Save
                     </button>
