@@ -37,6 +37,31 @@ const getDrugById = (req, res) => {
   });
 };
 
+const getDrugsByPharmacyID = (req, res) => {
+  const pharmacyID = req.params.id; // Accessing the ID as 'id'
+
+  if (!pharmacyID || isNaN(pharmacyID)) {
+    return res
+      .status(400)
+      .json({ message: `Invalid pharmacy ID provided. ${pharmacyID}` });
+  }
+
+  DrugStore.findByPharmacyID(pharmacyID, (err, results) => {
+    if (err) {
+      console.error(`Error fetching drugs for pharmacy ID ${pharmacyID}:`, err);
+      return res
+        .status(500)
+        .json({ message: "Error fetching drugs by pharmacyID.", error: err });
+    }
+    if (results.length === 0) {
+      return res
+        .status(404)
+        .json({ message: `No drugs found for pharmacy ID: ${pharmacyID}.` });
+    }
+    res.json(results);
+  });
+};
+
 const updateDrug = (req, res) => {
   const id = req.params.id;
   const updatedDrug = req.body;
@@ -64,6 +89,7 @@ module.exports = {
   createDrug,
   getAllDrugs,
   getDrugById,
+  getDrugsByPharmacyID,
   updateDrug,
   deleteDrug,
 };

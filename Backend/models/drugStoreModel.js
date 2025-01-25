@@ -23,18 +23,19 @@ const DrugStore = {
     const query = `SELECT * FROM DrugStore WHERE id = ?`;
     db.query(query, [id], callback);
   },
+
+  findByPharmacyID: (pharmacyID, callback) => {
+    const query = `SELECT * FROM DrugStore WHERE pharmacyID = ?`;
+    db.query(query, [pharmacyID], callback);
+  },
+
   update: (id, updatedDrug, callback) => {
-    const query = `UPDATE DrugStore SET category = ?, description = ?, drug_name = ?, pharmacyID = ?, price = ?, type = ?, quantity = ? WHERE id = ?`;
-    const values = [
-      updatedDrug.category,
-      updatedDrug.description,
-      updatedDrug.drug_name,
-      updatedDrug.pharmacyID,
-      updatedDrug.price,
-      updatedDrug.type,
-      updatedDrug.quantity,
-      id,
-    ];
+    const query = `UPDATE DrugStore 
+                   SET price = ?, quantity = ? 
+                   WHERE id = ?`;
+
+    const values = [updatedDrug.price, updatedDrug.quantity, id];
+
     db.query(query, values, callback);
   },
   delete: (id, callback) => {
