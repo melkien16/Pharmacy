@@ -177,7 +177,7 @@ const CustomerSearchPage = () => {
                 Search Results
               </h3>
               <div className="flex flex-col space-y-6">
-                {searchResults.map((result) => (
+                {combinedData.map((result) => (
                   <div
                     key={result.id}
                     className="bg-white rounded-lg shadow-md p-6 flex flex-col space-y-4 hover:shadow-lg transition-shadow w-full"
@@ -197,14 +197,13 @@ const CustomerSearchPage = () => {
                         <p className="text-sm text-gray-600">
                           Available at:{" "}
                           <span className="font-medium">
-                            {pharmacies[result.pharmacyID]?.name ||
-                              "Loading..."}
+                            {result.pharmacy?.name || "Loading..."}
                           </span>
                         </p>
                         <p className="text-sm text-gray-600">
                           Rating:{" "}
                           <span className="font-medium text-yellow-500 ml-1">
-                            {pharmacies[result.pharmacyID]?.rating || "N/A"} ★
+                            {result.pharmacy?.rating || "N/A"} ★
                           </span>
                         </p>
                         <div className="flex space-x-4 mt-4">
@@ -227,9 +226,10 @@ const CustomerSearchPage = () => {
                       <div className="flex flex-col items-center justify-between h-60 w-40 rounded-lg shadow-lg overflow-hidden p-3 py-10">
                         <div>
                           <p className="text-4xl font-bold text-green-500 text-center">
-                            {pharmacies[result.pharmacyID]?.distance.toFixed(
-                              2
-                            ) || "N/A"} <span className="text-gray-900 text-xl font-medium">km</span> 
+                            {result.pharmacy?.distance.toFixed(2) || "N/A"}{" "}
+                            <span className="text-gray-900 text-xl font-medium">
+                              km
+                            </span>
                           </p>
                           <p className="text-sm text-center text-gray-500">
                             away
