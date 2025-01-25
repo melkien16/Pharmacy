@@ -2,6 +2,10 @@ import React, { useState, useEffect, Fragment } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { sortData } from "../utils/sortData";
+import { getUserLocation } from "../utils/getUserLocation";
+import { haversine } from "../utils/haversine";
+
+import { use } from "react";
 
 const fetchPharmacyById = async (id) => {
   try {
@@ -35,6 +39,8 @@ const CustomerSearchPage = () => {
   const [selectedPharmacy, setSelectedPharmacy] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [userLocation, setUserLocation] = useState(null);
+  const [combinedData, setCombinedData] = useState([]);
 
   // Fetch Drugs Data
   useEffect(() => {
@@ -47,13 +53,34 @@ const CustomerSearchPage = () => {
     loadDrugs();
   }, []);
 
-  // Fetch Pharmacy Data
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const { latitude, longitude } = position.coords;
+        setUserLocation({ latitude, longitude });
+      });
+
+      console.log(userLocation);
+    }
+  }, []);
+
   useEffect(() => {
     const loadPharmacies = async () => {
       const newPharmacies = {};
       for (const result of searchResults) {
         if (result.pharmacyID && !newPharmacies[result.pharmacyID]) {
           const pharmacy = await fetchPharmacyById(result.pharmacyID);
+
+          const distance = parseFloat(
+            haversine(
+              pharmacy.latitude,
+              pharmacy.longitude,
+              userLocation.latitude,
+              userLocation.longitude
+            )
+          );
+          pharmacy.distance = distance;
+
           if (pharmacy) newPharmacies[result.pharmacyID] = pharmacy;
         }
       }
@@ -61,6 +88,18 @@ const CustomerSearchPage = () => {
     };
     if (searchResults.length > 0) loadPharmacies();
   }, [searchResults]);
+
+  useEffect(() => {
+    const combinedData = searchResults.map((result) => {
+      return {
+        ...result,
+        pharmacy: pharmacies[result.pharmacyID],
+      };
+    });
+    setCombinedData(combinedData);
+
+    console.log(combinedData);
+  }, [searchResults, pharmacies]);
 
   const handleSearch = () => {
     const filteredResults = searchResults.filter((item) =>
@@ -187,10 +226,18 @@ const CustomerSearchPage = () => {
                       </div>
                       <div className="flex flex-col items-center justify-between h-60 w-40 rounded-lg shadow-lg overflow-hidden p-3 py-10">
                         <div>
-                          <p className="text-3xl font-bold text-green-500 text-center">34 KM</p>
-                          <p className="text-sm text-center text-gray-500">away</p>
+                          <p className="text-4xl font-bold text-green-500 text-center">
+                            {pharmacies[result.pharmacyID]?.distance.toFixed(
+                              2
+                            ) || "N/A"} <span className="text-gray-900 text-xl font-medium">km</span> 
+                          </p>
+                          <p className="text-sm text-center text-gray-500">
+                            away
+                          </p>
                         </div>
-                        <div className="h-14 w-14 flex items-center justify-center bg-green-700 rounded-full text-white font-bold text-2xl cursor-pointer hover:scale-125 transition-all duration-300">GO</div>
+                        <div className="h-14 w-14 flex items-center justify-center bg-green-700 rounded-full text-white font-bold text-2xl cursor-pointer hover:scale-125 transition-all duration-300">
+                          GO
+                        </div>
                       </div>
                     </div>
                   </div>
