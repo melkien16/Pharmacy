@@ -2,15 +2,16 @@ const db = require("../config/db");
 
 const DrugStore = {
   create: (drug, callback) => {
-    const query = `INSERT INTO DrugStore (category, description, drug_name, pharmacyID, price, type, quantity) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+    const query = `INSERT INTO Drugstore (drug_name, category, description, price, type, quantity, pharmacyID)
+    VALUES (?, ?, ?, ?, ?, ?, ?)`;
     const values = [
+      drug.drug_name,
       drug.category,
       drug.description,
-      drug.drug_name,
-      drug.pharmacyID,
       drug.price,
       drug.type,
       drug.quantity,
+      drug.pharmacyID,
     ];
     db.query(query, values, callback);
   },
