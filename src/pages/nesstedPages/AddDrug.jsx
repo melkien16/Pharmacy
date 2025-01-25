@@ -1,16 +1,20 @@
 import React, { useContext, useState } from "react";
+import axios from "axios";
 import { UserContext } from "../../contexts/UserContext";
 
 const AddDrug = () => {
   const { user } = useContext(UserContext);
+
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [error, setError] = useState(null);
+
   const [formData, setFormData] = useState({
-    drugName: "",
+    drug_name: "",
     category: "",
     type: "",
     price: "",
     stock: "",
     description: "",
-    image: null,
   });
 
   const handleInputChange = (e) => {
@@ -19,13 +23,38 @@ const AddDrug = () => {
   };
 
   const handleImageChange = (e) => {
-    setFormData({ ...formData, image: e.target.files[0] });
+    // Handle image change logic here
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Drug data submitted:", formData);
-    // Add logic to submit the form data
+
+    const data = {
+      drug_name: formData.drug_name,
+      category: formData.category,
+      description: formData.description,
+      price: parseFloat(formData.price),
+      type: formData.type,
+      quantity: parseInt(formData.stock),
+      pharmacyID: parseInt(user.id),
+    };
+
+    setIsLoaded(false);
+    axios
+      .post("http://localhost:5000/api/drugstore", data)
+      .then((response) => {
+        setIsLoaded(true);
+        console.log("Drug added successfully:", response.data);
+        setFormData({
+          drug_name: "",
+          category: "",
+          type: "",
+          price: "",
+          stock: "",
+          description: "",
+        });
+      })
+      .catch((error) => console.error("Error adding drug:", error));
   };
 
   return (
@@ -34,6 +63,19 @@ const AddDrug = () => {
         <h1 className="text-2xl font-bold">PharmaFinder - Add Drug</h1>
         <p className="text-sm">Logged in as: {user?.name || "Admin"}</p>
       </header>
+
+      <div className="mt-20 h-20">
+        {isLoaded && (
+          <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 w-full">
+            <p>Drug added successfully!</p>
+          </div>
+        )}
+        {error && (
+          <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 w-full">
+            <p>Error adding drug: {error.message}</p>
+          </div>
+        )}
+      </div>
 
       <main className="mt-20 mb-10 w-full max-w-3xl bg-white p-8 shadow-lg rounded-lg">
         <h2 className="text-2xl font-semibold mb-6 text-gray-800">
@@ -45,9 +87,8 @@ const AddDrug = () => {
               Drug Name
             </label>
             <input
-              type="text"
-              name="drugName"
-              value={formData.drugName}
+              value={formData.drug_name}
+              name="drug_name"
               onChange={handleInputChange}
               className="w-full p-3 border rounded-md bg-gray-50"
               placeholder="Enter drug name"
@@ -145,10 +186,12 @@ const AddDrug = () => {
 
           <button
             type="submit"
+            disabled={isLoaded}
             className="w-full bg-blue-900 text-white p-3 rounded-md hover:bg-blue-800"
           >
             Add Drug
           </button>
+          {error && <p style={{ color: "red" }}>{error.message}</p>}
         </form>
       </main>
 
